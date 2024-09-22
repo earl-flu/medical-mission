@@ -1,0 +1,23 @@
+TO DO:
+1. Remove uneccessary fields in patients/create
+	Update Vue	
+	Update Controller
+
+30Mins(estimate) (12min done)
+
+2. Update patients.index
+	Pull only the necessary data
+30min(estimate) (4min done)
+
+3. Update Patient Show
+40min(estimate) 15min - to be continued 
+
+
+4. Make the add encounter functional
+	Update controller
+
+4.1 Add Encounter Edit Page and Update Controller
+
+5. Add history - laravel spatie
+
+6. Make available meds page - for doctors
