@@ -30,7 +30,6 @@ const props = defineProps({
   },
 });
 
-const maxDate = ref("");
 const age = calculateAge();
 
 const dateTimeNow = () => {

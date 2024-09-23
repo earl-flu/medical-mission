@@ -39,7 +39,7 @@ class EncounterController extends Controller
      */
     public function store(Request $request)
     {
-        DB::transaction(function () use ($request) {
+        DB::transaction(function () use ($request, &$encounter) {
             $validated = $request->validate([
                 'is_opto' => 'nullable|boolean',
                 'is_pregnant' => 'nullable|boolean',
@@ -58,10 +58,10 @@ class EncounterController extends Controller
             $validated['age'] = Carbon::parse($validated['patient_birthdate'])->age;
             $validated['encoded_by'] = Auth::id();
 
-            Encounter::create($validated);
+            $encounter = Encounter::create($validated);
         });
 
-        return redirect()->route('patients.index');
+        return redirect()->route('patients.show', $encounter->patient);
     }
 
     /**
@@ -69,7 +69,10 @@ class EncounterController extends Controller
      */
     public function show(Encounter $encounter)
     {
-        //
+        $encounter->load('patient');
+        return Inertia::render('Encounters/Show', [
+            'encounter' => $encounter,
+        ]);
     }
 
     /**
@@ -117,6 +120,8 @@ class EncounterController extends Controller
      */
     public function destroy(Encounter $encounter)
     {
-        //
+        $patient = $encounter->patient;
+        $encounter->delete();
+        return redirect()->route('patients.show', $patient);
     }
 }

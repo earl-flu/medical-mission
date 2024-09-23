@@ -1,5 +1,10 @@
 <script setup>
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from "@inertiajs/vue3";
+import { useToast } from "@/composables/useToast";
+import { useFormatDate } from "@/composables/useFormatDate";
+
+const { showToast } = useToast();
+const { formatDate } = useFormatDate();
 
 const props = defineProps({
   encounter: {
@@ -8,30 +13,15 @@ const props = defineProps({
   },
 });
 
-function formatDate(dateString) {
-  const date = new Date(dateString);
-  const now = new Date();
-
-  // Check if the date is valid
-  if (isNaN(date.getTime())) {
-    return "Invalid Date";
+function deleteEncounter(encounter) {
+  if (window.confirm("Are you sure you want to delete this encounter?")) {
+    router.delete(route("encounter.destroy", encounter), {
+      onSuccess: () => {
+        showToast(`Encounter from ${encounter.event_name}, has been deleted`);
+        form.reset();
+      },
+    });
   }
-
-  // Check if the date is today
-  if (date.toDateString() === now.toDateString()) {
-    return "Today";
-  }
-
-  // Format the date
-  const options = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  };
-
-  return date.toLocaleString("en-US", options);
 }
 </script>
 
@@ -50,13 +40,18 @@ function formatDate(dateString) {
     </td>
     <td class="px-6 py-4 text-right">
       <Link
-        :href="route('encounter.edit', props.encounter)"
+        :href="route('encounter.show', props.encounter)"
         class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+        >Show</Link
+      >
+      <Link
+        :href="route('encounter.edit', props.encounter)"
+        class="font-medium text-blue-600 dark:text-blue-500 hover:underline ml-3"
         >Edit</Link
       >
       <a
         href="#"
-        @click="remove()"
+        @click="deleteEncounter(props.encounter)"
         class="font-medium text-red-500 dark:text-red-100 hover:underline ml-3"
         >Remove</a
       >

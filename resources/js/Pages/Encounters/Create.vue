@@ -66,7 +66,7 @@ const form = useForm({
 function submitEncounter() {
   form.post(route("encounter.store"), {
     onSuccess: () => {
-      showToast(`${patient.first_name},encounter has been registered!`);
+      showToast(`${props.patient.first_name} encounter has been registered!`);
       form.reset();
     },
   });
@@ -89,7 +89,9 @@ function submitEncounter() {
         >
         >
         <Link :href="route('patients.show', $props.patient)"
-          ><span class="uppercase text-indigo-500">{{ $props.patient.full_name }}</span></Link
+          ><span class="uppercase text-indigo-500">{{
+            $props.patient.full_name
+          }}</span></Link
         >
         >
         <span>Add Encounter</span>
