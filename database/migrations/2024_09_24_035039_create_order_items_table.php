@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('patient_id')
+            $table->foreignId('encounter_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');

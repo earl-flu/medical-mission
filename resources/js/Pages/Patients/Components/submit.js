@@ -1,4 +1,4 @@
-import { props } from './OrderedItemRow.vue';
+import { props } from '../../../Components/OrderedItemRow.vue';
 
 export const submit = () => {
 console.log(props.ordered_item.id);

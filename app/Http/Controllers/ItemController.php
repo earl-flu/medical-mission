@@ -66,7 +66,8 @@ class ItemController extends Controller
         $validated = $request->validate([
             'name' => 'required|unique:items,name|string',
             'quantity' => 'required|integer|min:1',
-            'restock_threshold' => 'required|integer|min:1'
+            'restock_threshold' => 'required|integer|min:1',
+            'lot_no' => 'nullable|string',
         ]);
 
         $item = Item::create($validated);
@@ -101,7 +102,8 @@ class ItemController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', Rule::unique('items', 'name')->ignore($item->id)],
             'quantity' => 'required|integer|min:0',
-            'restock_threshold' => 'required|integer|min:1'
+            'restock_threshold' => 'required|integer|min:1',
+            'lot_no' => 'nullable|string',
         ]);
 
         $item->update($validated);

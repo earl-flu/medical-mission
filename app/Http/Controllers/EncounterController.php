@@ -6,6 +6,7 @@ use App\Models\Diagnosis;
 use App\Models\Encounter;
 use App\Models\Event;
 use App\Models\Patient;
+use App\Models\Service;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,7 +30,8 @@ class EncounterController extends Controller
     {
         return Inertia::render('Encounters/Create', [
             'diagnoses' => Diagnosis::all(),
-            'events' => Event::where('status', 1)->get(),
+            'events' => Event::where('status', 1)->orderBy('name', 'asc')->get(),
+            'services' => Service::where('status', 1)->orderBy('name', 'asc')->get(),
             'patient' => $patient,
         ]);
     }
@@ -54,11 +56,14 @@ class EncounterController extends Controller
                 'patient_id' => 'required|exists:patients,id',
                 'patient_birthdate' => 'required|date',
                 'encounter_date' => 'required|date',
+                'services' => 'array|exists:services,id',
+                'remarks' => 'nullable|string',
             ]);
             $validated['age'] = Carbon::parse($validated['patient_birthdate'])->age;
             $validated['encoded_by'] = Auth::id();
 
             $encounter = Encounter::create($validated);
+            $encounter->services()->sync($request->services);
         });
 
         return redirect()->route('patients.show', $encounter->patient);
@@ -72,6 +77,7 @@ class EncounterController extends Controller
         $encounter->load('patient');
         return Inertia::render('Encounters/Show', [
             'encounter' => $encounter,
+            'ordered_items' => $encounter->orderItems->load('item')
         ]);
     }
 
@@ -81,10 +87,13 @@ class EncounterController extends Controller
     public function edit(Encounter $encounter)
     {
         $encounter->load('patient');
+        $encounter->load('services');
+
         return Inertia::render('Encounters/Edit', [
             'encounter' => $encounter,
             'diagnoses' => Diagnosis::all(),
             'events' => Event::where('status', 1)->get(),
+            'services' => Service::where('status', 1)->orderBy('name', 'asc')->get(),
         ]);
     }
 
@@ -107,9 +116,12 @@ class EncounterController extends Controller
                 'diagnosis_id' => 'nullable|exists:diagnoses,id',
                 'patient_id' => 'required|exists:patients,id',
                 'encounter_date' => 'required|date',
+                'services' => 'array|exists:services,id',
+                'remarks' => 'nullable|string',
             ]);
 
             $encounter->update($validated);
+            $encounter->services()->sync($request->services);
         });
 
         return redirect()->route('patients.show', $encounter->patient);

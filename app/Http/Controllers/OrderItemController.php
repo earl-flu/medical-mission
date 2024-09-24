@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\OrderItemsExport;
+use App\Models\Encounter;
 use App\Models\Item;
 use App\Models\OrderItem;
 use App\Models\Patient;
@@ -21,8 +22,9 @@ class OrderItemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function create(Patient $patient)
+    public function create(Encounter $encounter)
     {
+        $encounter->load('patient');
         $items = Item::query()
             ->when(FacadesRequest::input('search'), function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
@@ -31,27 +33,24 @@ class OrderItemController extends Controller
             ->paginate(5)
             ->withQueryString();
 
-        $full_name = $patient->full_name;
-
         return Inertia::render('OrderItems/Create', [
             'items' => $items,
-            'full_name' => $full_name,
-            'patient_id' => $patient->id,
+            'encounter' => $encounter,
             'filters' => FacadesRequest::only(['search'])
         ]);
     }
 
 
-    public function store(Request $request, Patient $patient)
+    public function store(Request $request, Encounter $encounter)
     {
         $validated = $this->validate($request, [
-            'orderItems.*.id' => ['required', 'exists:items,id', new NotAlreadyOrdered($patient->id)],
+            'orderItems.*.id' => ['required', 'exists:items,id', new NotAlreadyOrdered($encounter->id)],
             'orderItems.*.order_quantity' => ['required', 'integer', 'min:1', new NotGreaterThanItemQuantity($request->input('orderItems'))],
             'orderItems.*.instruction' => ['nullable', 'string', 'max:500'],
-            'patientId' => 'required|exists:patients,id'
+            'encounterId' => 'required|exists:encounters,id'
         ]);
 
-        DB::transaction(function () use ($validated, $patient) {
+        DB::transaction(function () use ($validated, $encounter) {
 
             foreach ($validated['orderItems'] as $orderItemData) {
                 $itemId = $orderItemData['id'];
@@ -61,7 +60,7 @@ class OrderItemController extends Controller
                 $item->save();
 
                 OrderItem::create([
-                    'patient_id' => $patient->id, // Assuming you have the patient ID
+                    'encounter_id' => $encounter->id, // Assuming you have the patient ID
                     'item_id' => $item->id,
                     'quantity' => $orderItemData['order_quantity'],
                     'instruction' => $orderItemData['instruction'],
@@ -69,7 +68,7 @@ class OrderItemController extends Controller
             }
         });
 
-        return redirect()->route('patients.show', $patient->id)->with('message', 'Successfully added Order(s)');
+        return redirect()->route('encounter.show', $encounter)->with('message', 'Successfully added Order(s)');
     }
 
 
@@ -111,8 +110,8 @@ class OrderItemController extends Controller
             // Adjust Item quantity
             $item->update(['quantity' => $item->quantity - $quantityDifference]);
         });
-        // return redirect()->back()->with('message', 'test flash for redirect back OrderItemUpdate');
-        return redirect()->route('patients.show', $orderItem->patient->id)->with('message', 'Successfully added Order(s)');
+      
+        return redirect()->route('encounter.show', $orderItem->encounter)->with('message', 'Successfully added Order(s)');
     }
 
     public function destroy(OrderItem $orderItem)

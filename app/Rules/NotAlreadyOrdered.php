@@ -15,20 +15,18 @@ class NotAlreadyOrdered implements ValidationRule
      * @param  \Closure(string): \Illuminate\Translation\PotentiallyTranslatedString  $fail
      */
 
-    private $patientId;
+    private $encounterId;
 
-    public function __construct($patientId)
+    public function __construct($encounterId)
     {
-        $this->patientId = $patientId;
+        $this->encounterId = $encounterId;
     }
 
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        // dd($value);
-        $existingOrderItem = OrderItem::where('patient_id', $this->patientId)
+        $existingOrderItem = OrderItem::where('encounter_id', $this->encounterId)
             ->where('item_id', $value)
             ->first();
-        // $itemName = Item::find($value)->get();
 
         if ($existingOrderItem) {
             // Eager load the related item to access its name efficiently

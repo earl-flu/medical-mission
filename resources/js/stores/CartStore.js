@@ -5,12 +5,13 @@ export const useCartStore = defineStore("cart", () => {
     let orderItems = reactive([]);
 
     function addOrderItem(item) {
-        const { id, name } = item;
+        const { id, name, lot_no } = item;
         const exists = orderItems.some((orderItem) => orderItem.id === item.id);
         if (exists) return;
         return orderItems.push({
             id,
             name,
+            lot_no,
             instruction: '',
             order_quantity: 1,
         });

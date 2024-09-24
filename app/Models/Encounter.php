@@ -22,11 +22,20 @@ class Encounter extends Model
         return $this->belongsTo(Patient::class);
     }
 
+    public function services()
+    {
+        return $this->belongsToMany(Service::class)->withTimestamps();
+    }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+
     public function getEventNameAttribute()
     {
         $event_id = $this->attributes['event_id'];
         return Event::find($event_id)->name;
     }
-
-
 }

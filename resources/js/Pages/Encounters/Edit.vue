@@ -11,6 +11,8 @@ import axios from "axios";
 import { onMounted } from "vue";
 import { useToast } from "@/composables/useToast";
 import { useAgeCalculator } from "@/composables/useAgeCalculator";
+import Multiselect from "vue-multiselect";
+import "vue-multiselect/dist/vue-multiselect.css";
 
 const { showToast } = useToast();
 const { calculateAge } = useAgeCalculator();
@@ -25,6 +27,10 @@ const props = defineProps({
     required: true,
   },
   diagnoses: {
+    type: Array,
+    required: true,
+  },
+  services: {
     type: Array,
     required: true,
   },
@@ -48,12 +54,16 @@ const dateTimeNow = () => {
 
 const form = useForm({
   ...props.encounter,
+  services: props.encounter.services,
 });
 
 function updateEncounter() {
+  form.services = form.services.map((service) => service.id);
   form.put(route("encounter.update", props.encounter), {
     onSuccess: () => {
-      showToast(`${props.encounter.patient.first_name},encounter has been updated!`);
+      showToast(
+        `${props.encounter.patient.first_name},encounter has been updated!`
+      );
       form.reset();
     },
   });
@@ -276,6 +286,41 @@ function updateEncounter() {
                   />
 
                   <InputError class="mt-2" :message="form.errors.pulse_rate" />
+                </div>
+              </div>
+
+              <p class="font-bold text-xl mt-2">Service</p>
+
+              <div class="grid md:gap-6 mt-4">
+                <div class="relative w-full mb-6 group">
+                  <InputLabel for="service_id" value="Services" />
+                  <multiselect
+                    v-model="form.services"
+                    :options="services"
+                    :multiple="true"
+                    :close-on-select="false"
+                    placeholder="Select Services"
+                    label="name"
+                    track-by="id"
+                    :preselect-first="false"
+                    class="mt-1"
+                  />
+                  <InputError class="mt-2" :message="form.errors.service_id" />
+                </div>
+              </div>
+
+              <div class="grid md:gap-6">
+                <div class="relative w-full mb-6 group">
+                  <InputLabel for="remarks" value="Remarks" />
+                  <textarea
+                    name="remarks"
+                    v-model="form.remarks"
+                    id="remarks"
+                    rows="4"
+                    class="block mt-1 p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  ></textarea>
+
+                  <InputError class="mt-2" :message="form.errors.remarks" />
                 </div>
               </div>
 

@@ -100,7 +100,6 @@ class PatientController extends Controller
     {
         return Inertia::render('Patients/Show', [
             'patient' => $patient,
-            'ordered_items' => $patient->orderItems->load('item'), //sort this by orderItem created_at
             'encounters' => $patient->encounters->sortBy('encounter_date')
         ]);
     }

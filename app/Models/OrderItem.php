@@ -20,4 +20,8 @@ class OrderItem extends Model
     {
         return $this->belongsTo(Patient::class);
     }
+
+    public function encounter(){
+        return $this->belongsTo(Encounter::class);
+    }
 }

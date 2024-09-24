@@ -23,5 +23,6 @@ class DatabaseSeeder extends Seeder
         $this->call(BarangaySeeder::class);
         $this->call(DiagnosisSeeder::class);
         $this->call(EventSeeder::class);
+        $this->call(ServiceSeeder::class);
     }
 }

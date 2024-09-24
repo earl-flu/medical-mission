@@ -11,6 +11,8 @@ import axios from "axios";
 import { onMounted } from "vue";
 import { useToast } from "@/composables/useToast";
 import { useAgeCalculator } from "@/composables/useAgeCalculator";
+import Multiselect from "vue-multiselect";
+import "vue-multiselect/dist/vue-multiselect.css";
 
 const { showToast } = useToast();
 const { calculateAge } = useAgeCalculator();
@@ -18,6 +20,10 @@ const { calculateAge } = useAgeCalculator();
 const props = defineProps({
   patient: {
     type: Object,
+    required: true,
+  },
+  services: {
+    type: Array,
     required: true,
   },
   events: {
@@ -32,6 +38,14 @@ const props = defineProps({
 
 const maxDate = ref("");
 const age = calculateAge();
+const servicesOptions = ref([]);
+
+onMounted(() => {
+  servicesOptions.value = props.services.map((service) => ({
+    value: service.id,
+    label: service.name,
+  }));
+});
 
 const dateTimeNow = () => {
   const now = new Date();
@@ -56,14 +70,17 @@ const form = useForm({
   respiratory_rate: "",
   oxygen_saturation: "",
   pulse_rate: "",
+  remarks: "",
   age: age,
   event_id: props.events.length > 0 ? props.events[0].id : undefined,
   patient_id: props.patient.id,
   patient_birthdate: props.patient.birthdate,
   encounter_date: dateTimeNow(),
+  services: [],
 });
 
 function submitEncounter() {
+  form.services = form.services.map((service) => service.id);
   form.post(route("encounter.store"), {
     onSuccess: () => {
       showToast(`${props.patient.first_name} encounter has been registered!`);
@@ -105,7 +122,6 @@ function submitEncounter() {
           <div class="p-5 border flex gap-5">
             <div class="h-28 w-28 bg-gray-300"></div>
             <div class="text-gray-600">
-              <!-- <div class="text-xl text-gray-600 font-medium">Personal Details</div> -->
               <p class="uppercase text-cyan-800 font-medium">
                 {{ patient.full_name }}
               </p>
@@ -113,32 +129,6 @@ function submitEncounter() {
               <p>{{ patient.birthdate_str }}</p>
               <p>{{ patient.age_years }}</p>
               <p>{{ patient.full_address }}</p>
-              <!-- <div class="tags flex gap-3 mt-4 text-xs text-white">
-                <div
-                  v-show="medical_record.is_opto"
-                  class="p-2 py-0.5 bg-emerald-700 rounded-md shadow"
-                >
-                  Needs Opto
-                </div>
-                <div
-                  v-show="medical_record.is_pregnant"
-                  class="p-2 py-0.5 bg-yellow-600 rounded-md shadow"
-                >
-                  Pregnant
-                </div>
-                <div
-                  v-show="isSeniorCitizen"
-                  class="p-2 py-0.5 bg-pink-600 rounded-md shadow"
-                >
-                  Senior Citizen
-                </div>
-                <div
-                  v-show="isPedia"
-                  class="p-2 py-0.5 bg-violet-600 rounded-md shadow"
-                >
-                  Pedia
-                </div>
-              </div> -->
             </div>
           </div>
           <div class="p-6 text-gray-900 dark:text-gray-100">
@@ -315,19 +305,40 @@ function submitEncounter() {
 
                   <InputError class="mt-2" :message="form.errors.pulse_rate" />
                 </div>
+              </div>
+              <p class="font-bold text-xl mt-2">Service</p>
 
-                <!-- <div class="relative z-0 w-full mb-6 group">
-                                    <InputLabel for="diagnosis_id" value="Diagnosis" />
-                                    <select name="diagnosis_id" id="diagnosis_id" v-model="form.diagnosis_id" required
-                                        class="w-full border-gray-300 mt-1 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                                        <option value="" selected>-</option>
-                                        <option v-for="diagnosis in props.diagnoses" :key="diagnosis.id"
-                                            :value="diagnosis.id">{{ diagnosis.name }}
-                                        </option>
-                                    </select>
+              <div class="grid md:gap-6 mt-4">
+                <div class="relative w-full mb-6 group">
+                  <InputLabel for="service_id" value="Services" />
+                  <multiselect
+                    v-model="form.services"
+                    :options="services"
+                    :multiple="true"
+                    :close-on-select="false"
+                    placeholder="Select Services"
+                    label="name"
+                    track-by="id"
+                    :preselect-first="false"
+                    class="mt-1"
+                  />
+                  <InputError class="mt-2" :message="form.errors.service_id" />
+                </div>
+              </div>
 
-                                    <InputError class="mt-2" :message="form.errors.diagnosis_id" />
-                                </div> -->
+              <div class="grid md:gap-6">
+                <div class="relative w-full mb-6 group">
+                  <InputLabel for="remarks" value="Remarks" />
+                  <textarea
+                    name="remarks"
+                    v-model="form.remarks"
+                    id="remarks"
+                    rows="4"
+                    class="block mt-1 p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  ></textarea>
+
+                  <InputError class="mt-2" :message="form.errors.remarks" />
+                </div>
               </div>
 
               <button
