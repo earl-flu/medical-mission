@@ -7,13 +7,9 @@ use App\Http\Controllers\EncounterController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\GuestPageController;
 use App\Http\Controllers\ItemController;
-use App\Http\Controllers\MedicalRecordController;
 use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
-use App\Models\Barangay;
-use App\Models\MedicalRecord;
-use App\Models\OrderItem;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -56,10 +52,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('patients/{patient}/encounter/create', [EncounterController::class, 'create'])->name('encounter.create');
     Route::resource('encounter', EncounterController::class)->except('create');
-  
-
-    Route::get('/medical-records/{medicalRecord}/edit', [MedicalRecordController::class, 'edit'])->name('medical-records.edit');
-    Route::put('/medical-records/{medicalRecord}/', [MedicalRecordController::class, 'update'])->name('medical-records.update');
 
     Route::get('/diagnoses/create', [DiagnosisController::class, 'create'])->name('diagnoses.create');
     Route::post('/diagnoses', [DiagnosisController::class, 'store'])->name('diagnoses.store');
@@ -69,13 +61,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/items/import', [ItemController::class, 'import'])->name('items.import');
     Route::resource('items', ItemController::class)->except(['destroy']);
 
-    Route::resource('orderItems', OrderItemController::class)->only(['update', 'destroy']);
+    Route::resource('/orderItems', OrderItemController::class)->only(['update', 'destroy']);
 
-    Route::get('api/barangays/{municipalityId}', [BarangayController::class, 'getBarangays'])->name('barangays');
+    Route::get('/api/barangays/{municipalityId}', [BarangayController::class, 'getBarangays'])->name('barangays');
 
-    Route::get('orderItems/export/', [ExportController::class, 'exportOrderedItems']);
-    Route::get('disposedItemsTotal/export/', [ExportController::class, 'exportDisposedItemsTotal']);
-    Route::get('inventory/export/', [ExportController::class, 'exportInventory']);
+    Route::get('/orderItems/export/', [ExportController::class, 'exportOrderedItems']);
+    Route::get('/disposedItemsTotal/export/', [ExportController::class, 'exportDisposedItemsTotal']);
+    Route::get('/inventory/export/', [ExportController::class, 'exportInventory']);
+
+    Route::get('/api/statistics/{eventId}', [DashboardController::class, 'getStatistics'])->name('event.statistics');
+    Route::get('/api/dispensedMeds/{eventId}', [DashboardController::class, 'getDispensedMedsData'])->name('event.dispensedMeds');
+    Route::get('/api/encounterServiceData/{eventId}', [DashboardController::class, 'getEncounterServiceData'])->name('event.encounterServiceData');
+    Route::get('/api/municipalityData/{eventId}', [DashboardController::class, 'getMunicipalityData'])->name('event.municipalityData');
+    Route::get('/api/barangayData/{eventId}/{municipalityName}', [DashboardController::class, 'getBarangayData'])->name('event.barangayData');
+    Route::get('/api/availableStocks/', [DashboardController::class, 'getAvailableStocks'])->name('availableStocks');
 });
 
 

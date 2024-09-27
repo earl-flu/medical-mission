@@ -42,7 +42,7 @@ const showDiagnosis = computed(() => {
       <h2
         class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight"
       >
-        Patient Show
+        Patient Details
       </h2>
       <p class="text-xs text-gray-500 mt-2">
         <Link :href="route('patients.index')"
@@ -74,7 +74,7 @@ const showDiagnosis = computed(() => {
             <div class="p-5 border flex gap-5">
               <div class="h-28 w-28 bg-gray-300"></div>
               <div class="text-gray-600">
-                <p class="uppercase text-cyan-800 font-medium">
+                <p class="uppercase text-cyan-800 font-bold">
                   {{ patient.full_name }}
                 </p>
                 <p>{{ patient.sex_str }}</p>
@@ -92,7 +92,7 @@ const showDiagnosis = computed(() => {
         >
           <div class="p-6 text-gray-900 dark:text-gray-100">
             <div class="pb-5">
-              <p class="text-xl text-gray-600 font-medium mb-8">Encounters</p>
+              <p class="text-xl text-gray-600 font-medium mb-8"><font-awesome-icon class="mr-2" :icon="['fas', 'person-walking-arrow-right']" />Encounters</p>
               <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table
                   class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"

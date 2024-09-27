@@ -90,6 +90,24 @@ const submit = () => {
                 </div>
 
                 <div class="relative z-0 w-full mb-6 group">
+                  <InputLabel for="expiration_date" value="Expiration Date" />
+                  <TextInput
+                    name="expiration_date"
+                    id="expiration_date"
+                    type="date"
+                    class="mt-1 block w-full"
+                    placeholder=" "
+                    v-model="form.expiration_date"
+                    autocomplete="expiration_date"
+                  />
+
+                  <InputError
+                    class="mt-2"
+                    :message="form.errors.expiration_date"
+                  />
+                </div>
+
+                <div class="relative z-0 w-full mb-6 group">
                   <InputLabel for="quantity" value="Quantity*" />
                   <TextInput
                     name="quantity"

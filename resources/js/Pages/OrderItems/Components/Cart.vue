@@ -3,6 +3,9 @@ import CartTableRow from "./CartTableRow.vue";
 import { useForm } from "@inertiajs/vue3";
 import { useCartStore } from "@/stores/CartStore";
 import { computed, onUnmounted } from "vue";
+import { useFormatDate } from "@/composables/useFormatDate";
+
+const { formatDate } = useFormatDate();
 
 const props = defineProps({
   encounter: {
@@ -42,12 +45,18 @@ onUnmounted(() => {
   >
     <form @submit.prevent="submit()">
       <div class="p-6 text-gray-900 dark:text-gray-100">
-        <h2 class="text-xl font-medium mb-4">Cart</h2>
+        <h2 class="text-xl font-medium mb-4"><font-awesome-icon class="mr-2" :icon="['fas', 'cart-shopping']" />Cart</h2>
         <h2
-          class="text-2xl font-medium mb-8 uppercase text-cyan-700 font-medium"
+          class="text-2xl mb-1 font-medium uppercase text-cyan-700 font-medium"
         >
           {{ encounter.patient.full_name }}
         </h2>
+        <div class="opacity-75">
+          <p>{{ encounter.event_name }}</p>
+          <p>{{ encounter.patient.birthdate_str }}</p>
+          <p>{{ encounter.patient.sex_str }}</p>
+         <p class="mb-8" v-html="formatDate(encounter.encounter_date) || '-'"></p>
+        </div>
         <ul class="list-disc mb-3 ml-5" v-if="errors">
           <li
             class="text-sm text-red-500"

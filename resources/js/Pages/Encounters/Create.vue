@@ -63,7 +63,7 @@ const dateTimeNow = () => {
 
 const form = useForm({
   is_opto: false,
-  is_pregnant: false,
+  is_pregnant: 0,
   bp_systolic: "",
   bp_diastolic: "",
   temperature: "",
@@ -98,7 +98,7 @@ function submitEncounter() {
       <h2
         class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight"
       >
-        Create Patient Encounter
+        Create Encounter
       </h2>
       <p class="text-xs text-gray-500 mt-2">
         <Link :href="route('patients.index')"
@@ -249,7 +249,7 @@ function submitEncounter() {
                 </div>
               </div>
               <div class="grid md:grid-cols-3 md:gap-6">
-                <div class="relative z-0 w-full mb-6 group">
+                <div class="relative z-0 w-full group">
                   <InputLabel for="respiratory_rate" value="Respiratory Rate" />
                   <TextInput
                     name="respiratory_rate"
@@ -268,7 +268,7 @@ function submitEncounter() {
                   />
                 </div>
 
-                <div class="relative z-0 w-full mb-6 group">
+                <div class="relative z-0 w-full group">
                   <InputLabel
                     for="oxygen_saturation"
                     value="Oxygen Saturation (%)"
@@ -290,7 +290,7 @@ function submitEncounter() {
                   />
                 </div>
 
-                <div class="relative z-0 w-full mb-6 group">
+                <div class="relative z-0 w-full group">
                   <InputLabel for="pulse_rate" value="Pulse Rate" />
                   <TextInput
                     name="pulse_rate"
@@ -305,8 +305,27 @@ function submitEncounter() {
 
                   <InputError class="mt-2" :message="form.errors.pulse_rate" />
                 </div>
+
+                <div
+                  class="relative z-0 w-full group"
+                  v-if="patient.sex === 0"
+                >
+                  <InputLabel for="is_pregnant" value="Is Pregnant" />
+                  <select
+                    name="event"
+                    id="event"
+                    v-model="form.is_pregnant"
+                    required
+                    class="w-full border-gray-300 mt-1 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                  >
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                  </select>
+
+                  <InputError class="mt-2" :message="form.errors.is_pregnant" />
+                </div>
               </div>
-              <p class="font-bold text-xl mt-2">Service</p>
+              <p class="font-bold text-xl mt-8">Category</p>
 
               <div class="grid md:gap-6 mt-4">
                 <div class="relative w-full mb-6 group">

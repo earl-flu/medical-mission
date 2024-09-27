@@ -21,23 +21,13 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('changepassword'),
             ],
             [
-                'name' => 'Carlo',
-                'email' => 'carlo@pho.com',
+                'name' => 'Norvin',
+                'email' => 'norvin@pho.com',
                 'password' => Hash::make('changepassword'),
             ],
             [
-                'name' => 'Atom',
-                'email' => 'atom@pho.com',
-                'password' => Hash::make('changepassword'),
-            ],
-            [
-                'name' => 'Eug',
-                'email' => 'eug@pho.com',
-                'password' => Hash::make('changepassword'),
-            ],
-            [
-                'name' => 'Jonel',
-                'email' => 'jonel@pho.com',
+                'name' => 'John Francis',
+                'email' => 'john@pho.com',
                 'password' => Hash::make('changepassword'),
             ],
             [
@@ -46,15 +36,21 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('changepassword'),
             ],
             [
-                'name' => 'Jayson',
-                'email' => 'jayson@pho.com',
+                'name' => 'Mik',
+                'email' => 'mik@pho.com',
                 'password' => Hash::make('changepassword'),
             ],
             [
-                'name' => 'Jayrald',
-                'email' => 'jayrald@pho.com',
+                'name' => 'Demie',
+                'email' => 'dem@pho.com',
                 'password' => Hash::make('changepassword'),
             ],
+            [
+                'name' => 'Rica',
+                'email' => 'rica@pho.com',
+                'password' => Hash::make('changepassword'),
+            ],
+
         ]);
     }
 }

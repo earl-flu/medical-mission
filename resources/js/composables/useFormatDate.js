@@ -15,7 +15,7 @@ export const useFormatDate = () => {
                 hour: "2-digit",
                 minute: "2-digit",
             };
-            return `Today at ${date.toLocaleTimeString("en-US", timeOptions)}`;
+            return `<span style="border-left:2px solid green; display:block; padding-left:5px;">Today at ${date.toLocaleTimeString("en-US", timeOptions)}</span>`;
         }
 
         // Format the date

@@ -44,7 +44,7 @@ const bloodPressure = computed(() => {
       <h2
         class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight"
       >
-        Show Patient Encounter
+        Patient Encounter
       </h2>
       <p class="text-xs text-gray-500 mt-2">
         <Link :href="route('patients.index')"
@@ -57,7 +57,7 @@ const bloodPressure = computed(() => {
           }}</span></Link
         >
         >
-        <span>Show Encounter</span>
+        <span>Encounter</span>
         >
         <span>{{ props.encounter.event_name }}</span>
       </p>
@@ -70,7 +70,7 @@ const bloodPressure = computed(() => {
           <div class="p-5 border flex gap-5">
             <div class="h-28 w-28 bg-gray-300"></div>
             <div class="text-gray-600">
-              <p class="uppercase text-cyan-800 font-medium">
+              <p class="uppercase text-cyan-800 font-bold">
                 {{ encounter.patient.full_name }}
               </p>
               <p>{{ encounter.patient.sex_str }}</p>
@@ -89,7 +89,9 @@ const bloodPressure = computed(() => {
               <tr>
                 <td>Encounter Date</td>
                 <td class="px-5">:</td>
-                <td>{{ formatDate(encounter.encounter_date) || "-" }}</td>
+                <td>
+                  <p v-html="formatDate(encounter.encounter_date) || '-'"></p>
+                </td>
               </tr>
               <tr>
                 <td>Temperature</td>
@@ -128,11 +130,9 @@ const bloodPressure = computed(() => {
         >
           <div class="p-6 text-gray-900 dark:text-gray-100">
             <div class="pb-5">
-              <p class="text-xl text-gray-600 font-medium mb-8">Orders</p>
+              <p class="text-xl text-gray-600 font-medium mb-8"><font-awesome-icon class="mr-2" :icon="['fas', 'bag-shopping']" /> Orders</p>
 
-              <div
-                class="relative overflow-x-auto shadow-md sm:rounded-lg"
-              >
+              <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table
                   class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
                 >

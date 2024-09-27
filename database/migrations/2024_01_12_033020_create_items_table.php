@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('quantity');
             $table->string('lot_no')->nullable();
             $table->boolean('status')->default(1);
+            $table->date('expiration_date')->nullable();
             $table->integer('restock_threshold')->default(10);
             $table->timestamps();
         });

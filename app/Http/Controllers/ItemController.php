@@ -68,6 +68,7 @@ class ItemController extends Controller
             'quantity' => 'required|integer|min:1',
             'restock_threshold' => 'required|integer|min:1',
             'lot_no' => 'nullable|string',
+            'expiration_date' => 'nullable|date',
         ]);
 
         $item = Item::create($validated);
@@ -104,6 +105,7 @@ class ItemController extends Controller
             'quantity' => 'required|integer|min:0',
             'restock_threshold' => 'required|integer|min:1',
             'lot_no' => 'nullable|string',
+            'expiration_date' => 'nullable|date',
         ]);
 
         $item->update($validated);

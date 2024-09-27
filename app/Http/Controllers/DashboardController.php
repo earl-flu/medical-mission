@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Encounter;
+use App\Models\Event;
 use App\Models\Item;
 use App\Models\MedicalRecord;
 use App\Models\OrderItem;
@@ -12,62 +14,101 @@ use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
-    // ADD DIAGNOSES CHART OR TABLE
-    public function index(Request $request)
+    public function index(Request  $request)
     {
-        $dateFilter = $request->input('dateFilter', now()->format('Y-m-d'));
-        // $date = '2024-01-19';
-        $totalPatients = Patient::whereDate('created_at', $dateFilter)
-            ->count();
+        $events = Event::all()->sortBy('name')->values()->toArray();
 
-        $totalPregnant = MedicalRecord::where('is_pregnant', '1')
-            ->whereDate('created_at', $dateFilter)
-            ->count();
+        return Inertia::render('Dashboard', ['events' => $events]);
+    }
 
-        $totals = MedicalRecord::select(
-            DB::raw('SUM(CASE WHEN age <= 17 THEN 1 ELSE 0 END) as totalPedia'),
-            DB::raw('SUM(CASE WHEN age >= 60 THEN 1 ELSE 0 END) as totalSenior'),
-            DB::raw('SUM(CASE WHEN is_pregnant = 1 THEN 1 ELSE 0 END) as totalPregnant')
-        )
-            ->whereDate('created_at', $dateFilter)
+    public function getStatistics($eventid)
+    {
+        // dd($request->eventId);
+        $statistics = Event::findOrFail($eventid)->encounters()
+            ->select(
+                DB::raw('COUNT(*) as total_patients'),
+                DB::raw('SUM(CASE WHEN age < 18 THEN 1 ELSE 0 END) as total_pedia'),
+                DB::raw('SUM(CASE WHEN age >= 60 THEN 1 ELSE 0 END) as total_senior_citizen'),
+                DB::raw('SUM(CASE WHEN is_pregnant = 1 THEN 1 ELSE 0 END) as total_pregnant')
+            )
             ->first();
 
-        $genderCounts = Patient::select('sex', DB::raw('count(*) as total'))
-            ->whereDate('created_at', $dateFilter)
-            ->groupBy('sex')
-            ->get();
-
-        $totalDiagnoses = MedicalRecord::with('diagnosis')
-            ->select('diagnosis_id', DB::raw('COUNT(*) as total'))
-            ->whereDate('created_at', $dateFilter)
-            ->groupBy('diagnosis_id')
-            ->get();
-
-        $formattedTotalDiagnoses = $totalDiagnoses->map(function ($record) {
-            return [
-                'diagnosisName' => $record->diagnosis->name ?? 'Not set',
-                'total' => $record->total
-            ];
-        })->toArray();
-
-        // Ayos ini
-        $disposedItems = OrderItem::select('item_id', 'items.name', DB::raw('SUM(order_items.quantity) as total_quantity'))
-            ->join('items', 'items.id', '=', 'order_items.item_id')
-            ->whereDate('order_items.created_at', $dateFilter)
-            ->groupBy('item_id', 'items.name')
-            ->get();
-
-        $stocks = Item::select('name','quantity','restock_threshold')->get();
-
-        return Inertia::render('Dashboard', [
-            'totalPatients' => $totalPatients,
-            'genderCounts' => $genderCounts,
-            'disposedItems' => $disposedItems,
-            'totals' => $totals,
-            'dateFilter' => $dateFilter,
-            'totalDiagnoses' => $formattedTotalDiagnoses,
-            'totalPregnant' => $totalPregnant,
-            'stocks' => $stocks,
+        return response()->json([
+            'total_patients' => $statistics->total_patients,
+            'total_pedia' => $statistics->total_pedia,
+            'total_senior_citizen' => $statistics->total_senior_citizen,
+            'total_pregnant' => $statistics->total_pregnant,
         ]);
+    }
+
+    public function getDispensedMedsData($eventId)
+    {
+        $dispensedMeds = DB::table('encounters')
+            ->where('event_id', $eventId)
+            ->join('order_items', 'encounters.id', '=', 'order_items.encounter_id')
+            ->join('items', 'order_items.item_id', '=', 'items.id')
+            ->select('items.id as item_id', 'items.name as item_name', DB::raw('SUM(order_items.quantity) as total_quantity'))
+            ->groupBy('items.id', 'items.name')
+            ->get();
+
+        return response()->json($dispensedMeds);
+    }
+
+    public function getEncounterServiceData($eventId)
+    {
+        $services = Encounter::where('event_id', $eventId)
+            ->with('services')
+            ->get()
+            ->pluck('services')
+            ->flatten();
+
+        // Group by service id, sum the count, and transform the structure
+        $groupedServices = $services->groupBy('id')->map(function ($serviceGroup) {
+            $firstService = $serviceGroup->first();
+            return [
+                'id' => $firstService->id,
+                'name' => $firstService->name,
+                'total' => $serviceGroup->count(),
+            ];
+        })->values();
+
+        // Return as JSON response
+        return response()->json($groupedServices);
+    }
+
+    public function getMunicipalityData($eventId)
+    {
+        $encountersByCity = Encounter::where('event_id', 1)
+            ->join('patients', 'encounters.patient_id', '=', 'patients.id')
+            ->join('cities', 'patients.city_id', '=', 'cities.id')
+            ->select('cities.name as city_name', DB::raw('COUNT(encounters.id) as total_encounters'))
+            ->groupBy('cities.name')
+            ->get();
+
+        return response()->json($encountersByCity);
+    }
+
+    public function getBarangayData($eventId, $municipalityName)
+    {
+
+        $encountersByCity = Encounter::where('event_id', 1)
+            ->join('patients', 'encounters.patient_id', '=', 'patients.id')
+            ->join('cities', 'patients.city_id', '=', 'cities.id')
+            ->join('barangays', 'patients.barangay_id', '=', 'barangays.id')
+            ->select('cities.name as city_name', DB::raw('COUNT(encounters.id) as total_encounters'))
+            ->where('city_name', 'CARAMORAN')
+            ->groupBy('cities.name')
+            ->get();
+        dd($encountersByCity);
+        return response()->json($encountersByCity);
+    }
+
+    public function getAvailableStocks()
+    {
+        $items = Item::where('quantity', '>', 0)
+            ->orderBy('quantity', 'desc')
+            ->get()->toArray();
+        // dd($items);
+        return response()->json($items);
     }
 }

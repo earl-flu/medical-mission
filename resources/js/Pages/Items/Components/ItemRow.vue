@@ -36,6 +36,9 @@ const isLowStock = computed(() => {
     <td class="px-6 py-4">
       {{ item.lot_no }}
     </td>
+        <td class="px-6 py-4">
+      {{ item.expiration_date }}
+    </td>
     <td class="px-6 py-4">
       {{ item.restock_threshold }}
     </td>

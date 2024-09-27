@@ -62,7 +62,6 @@ defineProps({
           <div>
             <p class="mb-4 opacity-70" style="letter-spacing: 41px;">Catanduanes</p>
             <p class="font-bold mb-2 uppercase" style="font-size:40px; word-spacing:5px;">Provincial Health Office</p>
-            <!-- <p class="">"We Care About Catanduanes"</p> -->
           </div>
         </div>
       </div>

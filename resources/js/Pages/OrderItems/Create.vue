@@ -48,7 +48,7 @@ watch(
       <h2
         class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight"
       >
-        Patient - Add Order
+        Add Order
       </h2>
       <p class="text-xs text-gray-500 mt-2">
         <Link :href="route('patients.index')"
@@ -77,7 +77,7 @@ watch(
           class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg"
         >
           <div class="p-6 text-gray-900 dark:text-gray-100">
-            <h2 class="text-xl font-medium mb-4">Items</h2>
+            <h2 class="text-xl font-medium mb-4"><font-awesome-icon class="mr-2" :icon="['fas', 'pills']" />Items</h2>
             <div class="mb-10">
               <div class="relative z-0 w-full mb-6 group">
                 <TextInput
@@ -103,6 +103,7 @@ watch(
                   <tr>
                     <th scope="col" class="px-6 py-3">Item name</th>
                     <th scope="col" class="px-6 py-3">Quantity</th>
+                    <th scope="col" class="px-6 py-3">Lot No.</th>
                   </tr>
                 </thead>
                 <tbody>

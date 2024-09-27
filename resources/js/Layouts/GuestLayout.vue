@@ -9,15 +9,13 @@ import { Link } from '@inertiajs/vue3';
             <!-- <Link href="/">
                 <ApplicationLogo class="w-20 h-20 fill-current text-gray-500" />
             </Link> -->
-            <div class="text-gray-600 text-xs flex gap-3">
+            <div class="text-gray-600 text-xs flex items-center gap-3 mb-2">
                 <div class="image-logos flex gap-1">
                     <img class="w-14 h-14" src="/images/catanduanes-official-seal.png" alt="PLGU Catanduanes Logo">
-                    <img class="w-14 h-14" src="/images/CIA-LOGO.png" alt="CIA Logo">
                 </div>
                 <div>
-                    <p>Catanduanes International Association, Inc.</p>
-                    <p class="text-xl text-gray-800">11<span>th</span> Medical Mission</p>
-                    <p class="italic">"We Care About Catanduanes"</p>
+                    <p class="uppercase" style="letter-spacing:18.1px;">Catanduanes</p>
+                    <p class="text-xl text-gray-800 font-bold uppercase">Provincial Health Office</p>
                     <!-- <p class="text-gray-500 mt-2">January 22-26, 2024</p>
                 <p class="text-gray-500 ">PHO Warehouse, EBMC Compound</p> -->
                 </div>

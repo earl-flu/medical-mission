@@ -1,0 +1,1 @@
+function s(){return{calculateAge:a=>{if(a){const t=new Date,e=new Date(a);let n=t.getFullYear()-e.getFullYear();const o=e.getMonth(),c=e.getDate(),l=t.getMonth(),r=t.getDate();return(l<o||l===o&&r<c)&&n--,n}else return null}}}export{s as u};

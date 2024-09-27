@@ -33,7 +33,7 @@ function deleteEncounter(encounter) {
       scope="row"
       class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
     >
-      {{ formatDate(encounter.encounter_date) }}
+      <p v-html="formatDate(encounter.encounter_date)"></p>
     </th>
     <td class="px-6 py-4">
       {{ encounter.event_name }}

@@ -5,10 +5,14 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Patient extends Model
 {
+    use LogsActivity;
     use HasFactory;
+
     protected $guarded = ['id'];
 
     protected $appends = ['full_name', 'full_address', 'age_years', 'sex_str', 'birthdate_str'];
@@ -16,12 +20,15 @@ class Patient extends Model
     const MALE = 1;
     const FEMALE = 0;
 
-    //under 18 = pedia
-    public function medicalRecord()
+    public function getActivitylogOptions(): LogOptions
     {
-        return $this->hasOne(MedicalRecord::class);
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 
+    //under 18 = pedia
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
@@ -30,6 +37,11 @@ class Patient extends Model
     public function encounters()
     {
         return $this->hasMany(Encounter::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
     }
 
     public function getFullNameAttribute()

@@ -1,1 +1,0 @@
-import{S as s}from"./sweetalert2.all-2s0S0TEg.js";const i=()=>{const e=s.mixin({toast:!0,position:"top-end",showConfirmButton:!1,timer:3e3,timerProgressBar:!0,didOpen:o=>{o.onmouseenter=()=>s.stopTimer(),o.onmouseleave=()=>s.resumeTimer()}});return{showToast:(o,t="success")=>{e.fire({icon:t,title:o})}}};export{i as u};

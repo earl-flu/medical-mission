@@ -125,9 +125,6 @@ class PatientController extends Controller
      */
     public function update(Request $request, Patient $patient)
     {
-        //recalculate age and save to medicalrecord
-        // $patient = Patient::findOrFail($id);
-
         $validated = $request->validate([
             'first_name' => 'required|string',
             'middle_name' => 'nullable|string',
@@ -138,18 +135,6 @@ class PatientController extends Controller
             'city_id' => 'required|exists:cities,id',
             'sex' => 'required|boolean',
         ]);
-        // Check if birthdate has changed:
-        $birthdateChanged = $patient->birthdate !== $validated['birthdate'];
-
-        if ($birthdateChanged) {
-            // Recalculate age:
-            $age = Carbon::parse($validated['birthdate'])->age;
-
-            // Save to medical record:
-            $patient->medicalRecord->age = $age;
-            $patient->medicalRecord->save();
-        }
-
 
         $patient->update($validated);
 
