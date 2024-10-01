@@ -15,8 +15,10 @@ const chartData = ref(null);
 const generatePastelColors = (numColors) => {
   const pastelColors = [];
   for (let i = 0; i < numColors; i++) {
-    const hue = (i * 360) / numColors;
-    pastelColors.push(`hsl(${hue}, 70%, 80%)`);
+    const hue = (i * 137.5) % 360; // Using the golden angle for better distribution
+    const saturation = 55 + Math.random() * 15; // Randomize saturation
+    const lightness = 65 + Math.random() * 15; // Randomize lightness
+    pastelColors.push(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
   }
   return pastelColors;
 };
@@ -36,7 +38,7 @@ const chartOptions = computed(() => {
       height: "100%",
       width: "100%",
       toolbar: {
-        show: false,
+        show: true,
       },
       fontFamily: 'Poppins, sans-serif',
     },
@@ -82,12 +84,12 @@ const chartOptions = computed(() => {
       },
     },
     title: {
-      text: "Services Overview",
+      text: "Services",
       align: "center",
       margin: 20,
       offsetY: 0,
       style: {
-        fontSize: "20px",
+        fontSize: "16px",
         fontWeight: "bold",
         color: "#2D3748",
       },
@@ -135,7 +137,7 @@ watch(() => props.eventId, fetchData);
     <apexchart
       v-if="chartData"
       width="100%"
-      height="400"
+      height="100%"
       type="bar"
       :options="chartOptions"
       :series="series"
@@ -148,10 +150,10 @@ watch(() => props.eventId, fetchData);
 .chart-container {
   height: 100%;
   width: 100%;
-  background-color: #FFFFFF;
+  /* background-color: #FFFFFF;
   border-radius: 12px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  padding: 20px;
+  padding: 20px; */
 }
 
 .loading-text {

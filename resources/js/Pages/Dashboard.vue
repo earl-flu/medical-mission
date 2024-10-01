@@ -14,7 +14,7 @@ import { ref } from "vue";
 import TextInput from "@/Components/TextInput.vue";
 import Datalabels from "chartjs-plugin-datalabels";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-
+import EncountersByProgramChart from "@/Components/EncountersByProgramChart.vue";
 const props = defineProps({
   events: {
     type: Array,
@@ -86,7 +86,6 @@ const selectedEventId = ref(
               </div>
               <div
                 class="flex-1 bg-white shadow p-4 flex items-center justify-center flex-col gap-4"
-              
               >
                 <EncounterServiceChart :eventId="selectedEventId" />
               </div>
@@ -97,13 +96,13 @@ const selectedEventId = ref(
                 class="flex-1 bg-white shadow p-4 flex items-center justify-center flex-col gap-4"
                 style="height: 400px"
               >
-                <EncounterServiceChart :eventId="selectedEventId" />
+                <MunicipalityChart :eventId="selectedEventId" />
               </div>
               <div
                 class="flex-1 bg-white shadow p-4 flex items-center justify-center flex-col gap-4"
                 style="height: 400px"
               >
-                <MunicipalityChart :eventId="selectedEventId" />
+                <EncountersByProgramChart :eventId="selectedEventId" />
               </div>
             </div>
 

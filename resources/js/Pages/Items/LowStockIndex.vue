@@ -56,7 +56,7 @@ watch(
       </h2>
     </template>
     <div class="py-12">
-      <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+      <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
         <div class="p-6 text-gray-900 dark:text-gray-100">
           <div class="mb-10">
             <div class="relative z-0 w-full mb-6 group">
@@ -86,6 +86,7 @@ watch(
                   <th scope="col" class="px-6 py-3">Quantity</th>
                   <th scope="col" class="px-6 py-3">Lot No.</th>
                   <th scope="col" class="px-6 py-3">Expiry</th>
+                  <th scope="col" class="px-6 py-3">Program</th>
                   <th scope="col" class="px-6 py-3">Restock Threshold</th>
                   <th scope="col" class="px-6 py-3">
                     <span class="sr-only">Edit</span>

@@ -5,12 +5,20 @@ import InputLabel from "@/Components/InputLabel.vue";
 import InputError from "@/Components/InputError.vue";
 import { Head, useForm } from "@inertiajs/vue3";
 
+const props = defineProps({
+  programs: {
+    type: Array,
+    required: true,
+  },
+});
+
 const form = useForm({
   name: "",
   quantity: "",
   restock_threshold: "",
   lot_no: "",
   expiration_date: "",
+  program_id: "",
 });
 
 const submit = () => {
@@ -85,7 +93,29 @@ const submit = () => {
                     autocomplete="expiration_date"
                   />
 
-                  <InputError class="mt-2" :message="form.errors.expiration_date" />
+                  <InputError
+                    class="mt-2"
+                    :message="form.errors.expiration_date"
+                  />
+                </div>
+                <div class="relative z-0 w-full mb-6 group">
+                  <InputLabel for="program_id" value="Program*" />
+                  <select
+                    name="program_id"
+                    id="program_id"
+                    v-model="form.program_id"
+        
+                    class="w-full border-gray-300 mt-1 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                  >
+                    <option value="">-</option>
+                    <option
+                      v-for="program in props.programs"
+                      :key="program.id"
+                      :value="program.id"
+                    >
+                      {{ program.code }} {{ program.name }}
+                    </option>
+                  </select>
                 </div>
                 <div class="relative z-0 w-full mb-6 group">
                   <InputLabel for="quantity" value="Quantity*" />

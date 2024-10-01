@@ -36,8 +36,14 @@ const isLowStock = computed(() => {
     <td class="px-6 py-4">
       {{ item.lot_no }}
     </td>
-        <td class="px-6 py-4">
+    <td class="px-6 py-4">
       {{ item.expiration_date }}
+    </td>
+    <td class="px-6 py-4">
+      <template v-if="item.program">
+        {{ item.program.code }} {{ item.program.name }}
+      </template>
+      <template v-else> N/A </template>
     </td>
     <td class="px-6 py-4">
       {{ item.restock_threshold }}

@@ -19,6 +19,10 @@ return new class extends Migration
             $table->boolean('status')->default(1);
             $table->date('expiration_date')->nullable();
             $table->integer('restock_threshold')->default(10);
+            $table->foreignId('program_id')->constrained('programs')
+                ->onUpdate('cascade')
+                ->onDelete('cascade')
+                ->nullable();
             $table->timestamps();
         });
     }

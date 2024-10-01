@@ -2,7 +2,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import { Head, router, usePage } from "@inertiajs/vue3";
+import { Head, router, usePage, Link } from "@inertiajs/vue3";
 import Pagination from "@/Components/Pagination.vue";
 import ItemRow from "./Components/ItemRow.vue";
 import { ref, watch, onMounted } from "vue";
@@ -56,7 +56,16 @@ watch(
       </h2>
     </template>
     <div class="py-12">
-      <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+      <div class="max-w-5xl mx-auto sm:px-6 lg:px-8 mb-6 flex space-between">
+        <div class="flex-1"></div>
+        <Link
+          :href="route('items.create')"
+          class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 cursor-pointer"
+        >
+          Add Inventory Item
+        </Link>
+      </div>
+      <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
         <div class="p-6 text-gray-900 dark:text-gray-100">
           <div class="mb-10">
             <div class="relative z-0 w-full mb-6 group">
@@ -86,6 +95,7 @@ watch(
                   <th scope="col" class="px-6 py-3">Quantity</th>
                   <th scope="col" class="px-6 py-3">Lot no.</th>
                   <th scope="col" class="px-6 py-3">Expiry</th>
+                  <th scope="col" class="px-6 py-3">Program</th>
                   <th scope="col" class="px-6 py-3">Restock Threshold</th>
                   <th scope="col" class="px-6 py-3">
                     <span class="sr-only">Edit</span>

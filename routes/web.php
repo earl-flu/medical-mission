@@ -42,39 +42,59 @@ Route::get('/view/items', [GuestPageController::class, 'viewItems'])->name('view
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Profile routes
+    Route::controller(ProfileController::class)->group(function () {
+        Route::get('/profile', 'edit')->name('profile.edit');
+        Route::patch('/profile', 'update')->name('profile.update');
+    });
+
+    // Patient routes
     Route::resource('patients', PatientController::class)->except(['destroy']);
+    Route::controller(EncounterController::class)->group(function () {
+        Route::get('patients/{patient}/encounter/create', 'create')->name('encounter.create');
+        Route::resource('encounter', EncounterController::class)->except('create');
+    });
 
-    Route::get('patients/{encounter}/order-items', [OrderItemController::class, 'create'])->name('order-items.create');
-    Route::post('patients/{encounter}/order-items', [OrderItemController::class, 'store'])->name('order-items.store');
+    // Order item routes
+    Route::controller(OrderItemController::class)->group(function () {
+        Route::get('patients/{encounter}/order-items', 'create')->name('order-items.create');
+        Route::post('patients/{encounter}/order-items', 'store')->name('order-items.store');
+        Route::resource('/orderItems', OrderItemController::class)->only(['update', 'destroy']);
+    });
 
-    Route::get('patients/{patient}/encounter/create', [EncounterController::class, 'create'])->name('encounter.create');
-    Route::resource('encounter', EncounterController::class)->except('create');
+    // Diagnosis routes
+    Route::controller(DiagnosisController::class)->group(function () {
+        Route::get('/diagnoses/create', 'create')->name('diagnoses.create');
+        Route::post('/diagnoses', 'store')->name('diagnoses.store');
+    });
 
-    Route::get('/diagnoses/create', [DiagnosisController::class, 'create'])->name('diagnoses.create');
-    Route::post('/diagnoses', [DiagnosisController::class, 'store'])->name('diagnoses.store');
+    // Item routes
+    Route::controller(ItemController::class)->group(function () {
+        Route::get('/items/lowStock', 'lowStockIndex')->name('items.lowstock');
+        Route::get('/items/import', 'import')->name('items.import');
+        Route::resource('items', ItemController::class)->except(['destroy']);
+    });
 
-    Route::get('/items/lowStock', [ItemController::class, 'lowStockIndex'])->name('items.lowstock');
-    // Route::get('/items/createImport', [ItemController::class, 'createImport'])->name('items.createImport');
-    Route::get('/items/import', [ItemController::class, 'import'])->name('items.import');
-    Route::resource('items', ItemController::class)->except(['destroy']);
+    // API routes
+    Route::prefix('api')->group(function () {
+        Route::get('/barangays/{municipalityId}', [BarangayController::class, 'getBarangays'])->name('barangays');
+        Route::controller(DashboardController::class)->group(function () {
+            Route::get('/statistics/{eventId}', 'getStatistics')->name('event.statistics');
+            Route::get('/dispensedMeds/{eventId}', 'getDispensedMedsData')->name('event.dispensedMeds');
+            Route::get('/encounterServiceData/{eventId}', 'getEncounterServiceData')->name('event.encounterServiceData');
+            Route::get('/municipalityData/{eventId}', 'getMunicipalityData')->name('event.municipalityData');
+            Route::get('/barangayData/{eventId}/{municipalityName}', 'getBarangayData')->name('event.barangayData');
+            Route::get('/availableStocks', 'getAvailableStocks')->name('availableStocks');
+            Route::get('/encountersByProgram/{eventId}', 'getEncountersByProgram')->name('event.encountersByProgram');
+        });
+    });
 
-    Route::resource('/orderItems', OrderItemController::class)->only(['update', 'destroy']);
-
-    Route::get('/api/barangays/{municipalityId}', [BarangayController::class, 'getBarangays'])->name('barangays');
-
-    Route::get('/orderItems/export/', [ExportController::class, 'exportOrderedItems']);
-    Route::get('/disposedItemsTotal/export/', [ExportController::class, 'exportDisposedItemsTotal']);
-    Route::get('/inventory/export/', [ExportController::class, 'exportInventory']);
-
-    Route::get('/api/statistics/{eventId}', [DashboardController::class, 'getStatistics'])->name('event.statistics');
-    Route::get('/api/dispensedMeds/{eventId}', [DashboardController::class, 'getDispensedMedsData'])->name('event.dispensedMeds');
-    Route::get('/api/encounterServiceData/{eventId}', [DashboardController::class, 'getEncounterServiceData'])->name('event.encounterServiceData');
-    Route::get('/api/municipalityData/{eventId}', [DashboardController::class, 'getMunicipalityData'])->name('event.municipalityData');
-    Route::get('/api/barangayData/{eventId}/{municipalityName}', [DashboardController::class, 'getBarangayData'])->name('event.barangayData');
-    Route::get('/api/availableStocks/', [DashboardController::class, 'getAvailableStocks'])->name('availableStocks');
+    // Export routes
+    Route::controller(ExportController::class)->group(function () {
+        Route::get('/orderItems/export', 'exportOrderedItems');
+        Route::get('/disposedItemsTotal/export', 'exportDisposedItemsTotal');
+        Route::get('/inventory/export', 'exportInventory');
+    });
 });
 
 

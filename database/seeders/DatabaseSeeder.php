@@ -18,11 +18,16 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-        $this->call(UserSeeder::class);
-        $this->call(CitySeeder::class);
-        $this->call(BarangaySeeder::class);
-        $this->call(DiagnosisSeeder::class);
-        $this->call(EventSeeder::class);
-        $this->call(ServiceSeeder::class);
+        $this->call([
+            UserSeeder::class,
+            CitySeeder::class,
+            BarangaySeeder::class,
+            DiagnosisSeeder::class,
+            EventSeeder::class,
+            ServiceSeeder::class,
+            ProgramSeeder::class,
+            // Add other seeders here if you have any
+        ]);
+          
     }
 }

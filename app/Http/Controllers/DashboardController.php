@@ -78,7 +78,7 @@ class DashboardController extends Controller
 
     public function getMunicipalityData($eventId)
     {
-        $encountersByCity = Encounter::where('event_id', 1)
+        $encountersByCity = Encounter::where('event_id', $eventId)
             ->join('patients', 'encounters.patient_id', '=', 'patients.id')
             ->join('cities', 'patients.city_id', '=', 'cities.id')
             ->select('cities.name as city_name', DB::raw('COUNT(encounters.id) as total_encounters'))
@@ -90,17 +90,16 @@ class DashboardController extends Controller
 
     public function getBarangayData($eventId, $municipalityName)
     {
-
-        $encountersByCity = Encounter::where('event_id', 1)
+        $encountersByBarangay = Encounter::where('event_id', $eventId)
             ->join('patients', 'encounters.patient_id', '=', 'patients.id')
             ->join('cities', 'patients.city_id', '=', 'cities.id')
             ->join('barangays', 'patients.barangay_id', '=', 'barangays.id')
-            ->select('cities.name as city_name', DB::raw('COUNT(encounters.id) as total_encounters'))
-            ->where('city_name', 'CARAMORAN')
-            ->groupBy('cities.name')
+            ->select('barangays.name as barangay_name', DB::raw('COUNT(encounters.id) as total_encounters'))
+            ->where('cities.name', $municipalityName)
+            ->groupBy('barangays.name')
             ->get();
-        dd($encountersByCity);
-        return response()->json($encountersByCity);
+
+        return response()->json($encountersByBarangay);
     }
 
     public function getAvailableStocks()
@@ -110,5 +109,23 @@ class DashboardController extends Controller
             ->get()->toArray();
         // dd($items);
         return response()->json($items);
+    }
+
+    public function getEncountersByProgram($eventId)
+    {
+        $encountersByProgram = Encounter::where('encounters.event_id', $eventId)
+            ->join('order_items', 'encounters.id', '=', 'order_items.encounter_id')
+            ->join('items', 'order_items.item_id', '=', 'items.id')
+            ->join('programs', 'items.program_id', '=', 'programs.id')
+            ->select('programs.code as program_code', DB::raw('COUNT(DISTINCT encounters.id) as total_encounters'))
+            ->groupBy('programs.id', 'programs.code')
+            ->orderBy('total_encounters', 'desc')
+            ->get();
+
+        $result = $encountersByProgram->mapWithKeys(function ($item) {
+            return [$item['program_code'] => $item['total_encounters']];
+        });
+
+        return response()->json($result);
     }
 }

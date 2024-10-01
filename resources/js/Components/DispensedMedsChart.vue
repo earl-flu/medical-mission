@@ -12,68 +12,114 @@ const props = defineProps({
 
 const chartData = ref(null);
 
+// Add generatePastelColors function
+const generatePastelColors = (numColors) => {
+  const pastelColors = [];
+  for (let i = 0; i < numColors; i++) {
+    const hue = (i * 60) % 360; // Using 60 degrees for a different distribution
+    const saturation = 50 + Math.random() * 20; // Different saturation range
+    const lightness = 70 + Math.random() * 15; // Different lightness range
+    pastelColors.push(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
+  } 
+  return pastelColors;
+};
+
 // Computed properties for chart options and series
-const chartOptions = computed(() => ({
-  chart: {
-    type: "bar",
-    height: "100%",
-    width: "100%",
-  },
-  plotOptions: {
-    bar: {
-      horizontal: false,
-      columnWidth: "55%",
-      endingShape: "rounded",
+const chartOptions = computed(() => {
+  const dataLength = chartData.value?.data.length || 0;
+  const pastelColors = generatePastelColors(dataLength);
+
+  return {
+    chart: {
+      type: "bar",
+      height: "100%",
+      width: "100%",
+      toolbar: {
+        show: true,
+      },
+      fontFamily: "Poppins, sans-serif",
     },
-  },
-  dataLabels: {
-    enabled: true,
-  },
-  stroke: {
-    show: true,
-    width: 2,
-    colors: ["transparent"],
-  },
-  xaxis: {
-    categories: chartData.value ? chartData.value.labels : [],
-  },
-  title: {
-    text: "Dispensed Items", // Title of the chart
-    align: "center", // Can be 'left', 'center', or 'right'
-    margin: 10, // Margin between the chart and title
-    offsetY: 0, // Adjust vertical position of the title
-    style: {
-      fontSize: "16px",
-      fontWeight: "bold",
-      color: "#263238", // Color of the title
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: "65%",
+        borderRadius: 8,
+        distributed: true,
+      },
     },
-  },
-  fill: {
-    type: "gradient",
-    gradient: {
-      shade: "dark",
-      type: "vertical",
-      shadeIntensity: 0.5,
-      gradientToColors: undefined, // optional, if not defined - uses the shades of same color in series
-      inverseColors: true,
-      opacityFrom: 1,
-      opacityTo: 1,
-      stops: [0, 50, 100],
-      colorStops: [],
-    },
-  },
-  tooltip: {
-    y: {
+    dataLabels: {
+      enabled: true,
       formatter: function (val) {
         return val;
       },
+      offsetY: -20,
+      style: {
+        fontSize: "12px",
+        colors: ["#304758"],
+      },
     },
-  },
-}));
+    stroke: {
+      show: true,
+      width: 2,
+      colors: ["transparent"],
+    },
+    xaxis: {
+      categories: chartData.value ? chartData.value.labels : [],
+      labels: {
+        style: {
+          colors: "#718096",
+          fontSize: "12px",
+        },
+      },
+    },
+    yaxis: {
+      title: {
+        text: "Quantity Dispensed",
+        style: {
+          color: "#4A5568",
+          fontSize: "14px",
+          fontWeight: 600,
+        },
+      },
+      labels: {
+        style: {
+          colors: "#718096",
+          fontSize: "12px",
+        },
+      },
+    },
+    title: {
+      text: "Dispensed Items",
+      align: "center",
+      margin: 20,
+      offsetY: 0,
+      style: {
+        fontSize: "16px",
+        fontWeight: "bold",
+        color: "#2D3748",
+      },
+    },
+    fill: {
+      opacity: 1,
+    },
+    tooltip: {
+      y: {
+        formatter: (val) => `${val}`,
+      },
+    },
+    colors: pastelColors,
+    grid: {
+      borderColor: "#E2E8F0",
+    },
+    legend: {
+      show: false,
+    },
+  };
+});
 
 const series = computed(() => [
   {
-    name: "Total",
+    name: "Quantity",
     data: chartData.value ? chartData.value.data : [],
   },
 ]);
@@ -114,6 +160,7 @@ watch(
       :options="chartOptions"
       :series="series"
     />
+    <p v-else class="loading-text">Loading chart data...</p>
   </div>
 </template>
 
@@ -121,5 +168,12 @@ watch(
 .chart-container {
   height: 100%;
   width: 100%;
+}
+
+.loading-text {
+  text-align: center;
+  color: #718096;
+  font-size: 16px;
+  padding: 20px;
 }
 </style>

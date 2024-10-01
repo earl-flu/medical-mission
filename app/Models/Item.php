@@ -27,4 +27,9 @@ class Item extends Model
         // Define a one-to-many relationship with OrderItem
         return $this->hasMany(OrderItem::class);
     }
+
+    public function program()
+    {
+        return $this->belongsTo(Program::class);
+    }
 }

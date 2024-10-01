@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Request as FacadesRequest;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Program;
 
 class ItemController extends Controller
 {
@@ -19,6 +20,7 @@ class ItemController extends Controller
     public function index()
     {
         $items = Item::query()
+            ->with('program')
             ->when(FacadesRequest::input('search'), function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
             })
@@ -36,6 +38,7 @@ class ItemController extends Controller
     {
 
         $lowStockItems = Item::query()
+            ->with('program')
             ->when(FacadesRequest::input('search'), function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
             })
@@ -55,7 +58,10 @@ class ItemController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Items/Create', []);
+        $programs = Program::all();
+        return Inertia::render('Items/Create', [
+            'programs' => $programs
+        ]);
     }
 
     /**
@@ -69,6 +75,7 @@ class ItemController extends Controller
             'restock_threshold' => 'required|integer|min:1',
             'lot_no' => 'nullable|string',
             'expiration_date' => 'nullable|date',
+            'program_id' => 'nullable|exists:programs,id',
         ]);
 
         $item = Item::create($validated);
@@ -89,8 +96,10 @@ class ItemController extends Controller
      */
     public function edit(Item $item)
     {
+        $programs = Program::all();
         return Inertia::render('Items/Edit', [
             'item' => $item,
+            'programs' => $programs
         ]);
     }
 
@@ -99,16 +108,16 @@ class ItemController extends Controller
      */
     public function update(Request $request, Item $item)
     {
-        // dd($item->name);
-        $validated = $request->validate([
+        $validatedData = $request->validate([
             'name' => ['required', 'string', Rule::unique('items', 'name')->ignore($item->id)],
             'quantity' => 'required|integer|min:0',
             'restock_threshold' => 'required|integer|min:1',
             'lot_no' => 'nullable|string',
             'expiration_date' => 'nullable|date',
+            'program_id' => 'nullable|exists:programs,id',
         ]);
 
-        $item->update($validated);
+        $item->update($validatedData);
 
         return redirect()->route('items.index');
     }

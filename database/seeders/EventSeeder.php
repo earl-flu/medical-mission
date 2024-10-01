@@ -20,7 +20,7 @@ class EventSeeder extends Seeder
             ],
             [
                 'name' => 'Ugnayan sa Barangay (Pandan), Oct. 4, 2024',
-                'status' => 1,
+                'status' => 0,
             ],
             [
                 'name' => 'Ugnayan sa Barangay (San Miguel), Oct. 7, 2024',
