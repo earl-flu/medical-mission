@@ -15,6 +15,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  officeName: {
+    type: String,
+    required: true,
+  },
   ordered_items: {
     type: Array,
     required: true,
@@ -94,6 +98,35 @@ const bloodPressure = computed(() => {
                 </td>
               </tr>
               <tr>
+                <td>Office</td>
+                <td class="px-5">:</td>
+                <td>{{ officeName }}</td>
+              </tr>
+              <tr>
+                <td>Drug Test</td>
+                <td class="px-5">:</td>
+                <td>
+                  <span
+                    class="text-white text-xs p-1 rounded"
+                    :class="
+                      encounter.is_positive
+                        ? 'bg-red-500'
+                        : encounter.is_positive === 0
+                        ? 'bg-green-500'
+                        : ''
+                    "
+                  >
+                    {{
+                      encounter.is_positive
+                        ? "Positive"
+                        : encounter.is_positive === 0
+                        ? "Negative"
+                        : "-"
+                    }}</span
+                  >
+                </td>
+              </tr>
+              <tr>
                 <td>Temperature</td>
                 <td class="px-5">:</td>
                 <td>{{ encounter.temperature || "-" }}</td>
@@ -130,7 +163,13 @@ const bloodPressure = computed(() => {
         >
           <div class="p-6 text-gray-900 dark:text-gray-100">
             <div class="pb-5">
-              <p class="text-xl text-gray-600 font-medium mb-8"><font-awesome-icon class="mr-2" :icon="['fas', 'bag-shopping']" /> Orders</p>
+              <p class="text-xl text-gray-600 font-medium mb-8">
+                <font-awesome-icon
+                  class="mr-2"
+                  :icon="['fas', 'bag-shopping']"
+                />
+                Orders
+              </p>
 
               <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table

@@ -7,6 +7,7 @@ use App\Http\Controllers\EncounterController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\GuestPageController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
@@ -74,6 +75,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/items/import', 'import')->name('items.import');
         Route::resource('items', ItemController::class)->except(['destroy']);
     });
+
+    // Offices Route
+    Route::resource('offices', OfficeController::class);
 
     // API routes
     Route::prefix('api')->group(function () {

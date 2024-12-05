@@ -23,10 +23,12 @@ const generatePastelColors = (numColors) => {
   return pastelColors;
 };
 
-const series = computed(() => [{
-  name: "Total Patients",
-  data: chartData.value?.data || [],
-}]);
+const series = computed(() => [
+  {
+    name: "Total Patients",
+    data: chartData.value?.data || [],
+  },
+]);
 
 const chartOptions = computed(() => {
   const dataLength = chartData.value?.data.length || 0;
@@ -40,7 +42,7 @@ const chartOptions = computed(() => {
       toolbar: {
         show: true,
       },
-      fontFamily: 'Poppins, sans-serif',
+      fontFamily: "Poppins, sans-serif",
     },
     plotOptions: {
       bar: {
@@ -51,7 +53,11 @@ const chartOptions = computed(() => {
       },
     },
     dataLabels: {
-      enabled: false,
+      enabled: true,
+      style: {
+        fontSize: "12px",
+        colors: ["#304758"],
+      },
     },
     stroke: {
       show: true,
@@ -62,24 +68,24 @@ const chartOptions = computed(() => {
       categories: chartData.value?.labels || [],
       labels: {
         style: {
-          colors: '#718096',
-          fontSize: '12px',
+          colors: "#718096",
+          fontSize: "12px",
         },
       },
     },
     yaxis: {
       title: {
-        text: 'Number of Patients',
+        text: "Number of Patients",
         style: {
-          color: '#4A5568',
-          fontSize: '14px',
+          color: "#4A5568",
+          fontSize: "14px",
           fontWeight: 600,
         },
       },
       labels: {
         style: {
-          colors: '#718096',
-          fontSize: '12px',
+          colors: "#718096",
+          fontSize: "12px",
         },
       },
     },
@@ -104,7 +110,7 @@ const chartOptions = computed(() => {
     },
     colors: pastelColors,
     grid: {
-      borderColor: '#E2E8F0',
+      borderColor: "#E2E8F0",
     },
     legend: {
       show: false,
@@ -114,7 +120,9 @@ const chartOptions = computed(() => {
 
 const fetchData = async () => {
   try {
-    const response = await fetch(route("event.encounterServiceData", props.eventId));
+    const response = await fetch(
+      route("event.encounterServiceData", props.eventId)
+    );
     const data = await response.json();
     data.sort((a, b) => Number(b.total) - Number(a.total));
 

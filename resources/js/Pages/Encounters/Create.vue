@@ -30,6 +30,10 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  offices: {
+    type: Array,
+    required: true,
+  },
   diagnoses: {
     type: Array,
     required: true,
@@ -71,6 +75,8 @@ const form = useForm({
   oxygen_saturation: "",
   pulse_rate: "",
   remarks: "",
+  office_id: null,
+  is_positive: false,
   age: age,
   event_id: props.events.length > 0 ? props.events[0].id : undefined,
   patient_id: props.patient.id,
@@ -177,9 +183,44 @@ function submitEncounter() {
                   />
                 </div>
               </div>
+              <!-- here here -->
+              <div class="relative z-0 w-full group">
+                <InputLabel for="office" value="Office" />
+                <select
+                  name="office"
+                  id="office"
+                  v-model="form.office_id"
+                  required
+                  class="w-full border-gray-300 mt-1 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"  
+                >
+                  <option
+                    v-for="office in props.offices"
+                    :key="office.id"
+                    :value="office.id"
+                  >
+                    {{ office.name }}
+                  </option>
+                </select>
+
+                <InputError class="mt-2" :message="form.errors.office" />
+              </div>
+
+              <div class="md:gap-6 mt-4">
+                <div class="relative z-0 w-full mb-6 group">
+                  <InputLabel for="is_positive" value="Is Positive" />
+                  <Checkbox
+                    name="is_positive"
+                    id="is_positive"
+                    class="mt-1 block"
+                    v-model="form.is_positive"
+                    :checked="form.is_positive"
+                    autocomplete="encounter_date"
+                  />
+                </div>
+              </div>
               <p class="font-bold text-xl mt-10">Vital Signs</p>
 
-              <div class="grid md:grid-cols-3 md:gap-6 mt-4">
+              <!-- <div class="grid md:grid-cols-3 md:gap-6 mt-4">
                 <div
                   class="relative z-0 w-full mb-6 group"
                   v-if="form.sex == '0'"
@@ -194,7 +235,7 @@ function submitEncounter() {
                     >
                   </label>
                 </div>
-              </div>
+              </div> -->
               <div class="grid md:grid-cols-3 md:gap-6">
                 <div class="relative z-0 w-full mb-6 group">
                   <InputLabel for="temperature" value="Temperature (deg)" />
@@ -306,14 +347,11 @@ function submitEncounter() {
                   <InputError class="mt-2" :message="form.errors.pulse_rate" />
                 </div>
 
-                <div
-                  class="relative z-0 w-full group"
-                  v-if="patient.sex === 0"
-                >
+                <div class="relative z-0 w-full group" v-if="patient.sex === 0">
                   <InputLabel for="is_pregnant" value="Is Pregnant" />
                   <select
-                    name="event"
-                    id="event"
+                    name="is_pregnant"
+                    id="is_pregnant"
                     v-model="form.is_pregnant"
                     required
                     class="w-full border-gray-300 mt-1 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"

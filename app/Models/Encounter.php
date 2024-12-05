@@ -34,6 +34,11 @@ class Encounter extends Model
         return $this->belongsTo(Patient::class);
     }
 
+    public function office()
+    {
+        return $this->belongsTo(Office::class);
+    }
+
     public function services()
     {
         return $this->belongsToMany(Service::class)->withTimestamps();

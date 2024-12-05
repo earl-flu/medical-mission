@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Diagnosis;
 use App\Models\Encounter;
 use App\Models\Event;
+use App\Models\Office;
 use App\Models\Patient;
 use App\Models\Service;
 use Carbon\Carbon;
@@ -32,6 +33,7 @@ class EncounterController extends Controller
             'diagnoses' => Diagnosis::all(),
             'events' => Event::where('status', 1)->orderBy('name', 'asc')->get(),
             'services' => Service::where('status', 1)->orderBy('name', 'asc')->get(),
+            'offices' => Office::where('is_active', 1)->orderBy('name', 'asc')->get(),
             'patient' => $patient,
         ]);
     }
@@ -58,6 +60,8 @@ class EncounterController extends Controller
                 'encounter_date' => 'required|date',
                 'services' => 'array|exists:services,id',
                 'remarks' => 'nullable|string',
+                'is_positive' => 'nullable|boolean',
+                'office_id' => 'nullable|exists:offices,id',
             ]);
             $validated['age'] = Carbon::parse($validated['patient_birthdate'])->age;
             $validated['encoded_by'] = Auth::id();
@@ -75,7 +79,14 @@ class EncounterController extends Controller
     public function show(Encounter $encounter)
     {
         $encounter->load('patient');
+        if ($encounter->office) {
+            $office = $encounter->office;
+            $officeName = "{$office->abbreviation} - {$office->name}";
+        } else {
+            $officeName = 'N/A';
+        }
         return Inertia::render('Encounters/Show', [
+            'officeName' => $officeName,
             'encounter' => $encounter,
             'ordered_items' => $encounter->orderItems->load('item')
         ]);
@@ -118,6 +129,8 @@ class EncounterController extends Controller
                 'encounter_date' => 'required|date',
                 'services' => 'array|exists:services,id',
                 'remarks' => 'nullable|string',
+                'is_positive' => 'nullable|boolean',
+                'office' => 'nullable|exists:offices,id',
             ]);
 
             $encounter->update($validated);
