@@ -183,221 +183,233 @@ function submitEncounter() {
                   />
                 </div>
               </div>
-              <!-- here here -->
-              <div class="relative z-0 w-full group">
-                <InputLabel for="office" value="Office" />
-                <select
-                  name="office"
-                  id="office"
-                  v-model="form.office_id"
-                  required
-                  class="w-full border-gray-300 mt-1 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"  
-                >
-                  <option
-                    v-for="office in props.offices"
-                    :key="office.id"
-                    :value="office.id"
-                  >
-                    {{ office.name }}
-                  </option>
-                </select>
-
-                <InputError class="mt-2" :message="form.errors.office" />
-              </div>
-
-              <div class="md:gap-6 mt-4">
-                <div class="relative z-0 w-full mb-6 group">
-                  <InputLabel for="is_positive" value="Is Positive" />
-                  <Checkbox
-                    name="is_positive"
-                    id="is_positive"
-                    class="mt-1 block"
-                    v-model="form.is_positive"
-                    :checked="form.is_positive"
-                    autocomplete="encounter_date"
-                  />
-                </div>
-              </div>
-              <p class="font-bold text-xl mt-10">Vital Signs</p>
-
-              <!-- <div class="grid md:grid-cols-3 md:gap-6 mt-4">
-                <div
-                  class="relative z-0 w-full mb-6 group"
-                  v-if="form.sex == '0'"
-                >
-                  <label class="flex items-center">
-                    <Checkbox
-                      name="remember"
-                      v-model:checked="form.is_pregnant"
-                    />
-                    <span class="ms-2 text-sm text-gray-600 dark:text-gray-400"
-                      >Pregnant</span
-                    >
-                  </label>
-                </div>
-              </div> -->
-              <div class="grid md:grid-cols-3 md:gap-6">
-                <div class="relative z-0 w-full mb-6 group">
-                  <InputLabel for="temperature" value="Temperature (deg)" />
-                  <TextInput
-                    name="temperature"
-                    id="temperature"
-                    type="number"
-                    step="0.1"
-                    class="mt-1 block w-full"
-                    placeholder=" "
-                    v-model="form.temperature"
-                    autofocus
-                    autocomplete="temperature"
-                  />
-
-                  <InputError class="mt-2" :message="form.errors.temperature" />
-                </div>
-
-                <div class="relative z-0 w-full mb-6 group">
-                  <InputLabel for="bp_systolic" value="BP Systolic" />
-                  <TextInput
-                    name="bp_systolic"
-                    id="bp_systolic"
-                    type="number"
-                    class="mt-1 block w-full"
-                    placeholder="120"
-                    v-model="form.bp_systolic"
-                    autofocus
-                    autocomplete="bp_systolic"
-                  />
-
-                  <InputError class="mt-2" :message="form.errors.temperature" />
-                </div>
-
-                <div class="relative z-0 w-full mb-6 group">
-                  <InputLabel for="bp_diastolic" value="BP Diastolic" />
-                  <TextInput
-                    name="bp_diastolic"
-                    id="bp_diastolic"
-                    type="number"
-                    class="mt-1 block w-full"
-                    placeholder="80"
-                    v-model="form.bp_diastolic"
-                    autofocus
-                    autocomplete="bp_diastolic"
-                  />
-
-                  <InputError
-                    class="mt-2"
-                    :message="form.errors.bp_diastolic"
-                  />
-                </div>
-              </div>
-              <div class="grid md:grid-cols-3 md:gap-6">
+              <template v-if="form.event_id === 12">
                 <div class="relative z-0 w-full group">
-                  <InputLabel for="respiratory_rate" value="Respiratory Rate" />
-                  <TextInput
-                    name="respiratory_rate"
-                    id="respiratory_rate"
-                    type="number"
-                    class="mt-1 block w-full"
-                    placeholder=" "
-                    v-model="form.respiratory_rate"
-                    autofocus
-                    autocomplete="respiratory_rate"
-                  />
-
-                  <InputError
-                    class="mt-2"
-                    :message="form.errors.respiratory_rate"
-                  />
-                </div>
-
-                <div class="relative z-0 w-full group">
-                  <InputLabel
-                    for="oxygen_saturation"
-                    value="Oxygen Saturation (%)"
-                  />
-                  <TextInput
-                    name="oxygen_saturation"
-                    id="oxygen_saturation"
-                    type="number"
-                    class="mt-1 block w-full"
-                    placeholder=" "
-                    v-model="form.oxygen_saturation"
-                    autofocus
-                    autocomplete="oxygen_saturation"
-                  />
-
-                  <InputError
-                    class="mt-2"
-                    :message="form.errors.oxygen_saturation"
-                  />
-                </div>
-
-                <div class="relative z-0 w-full group">
-                  <InputLabel for="pulse_rate" value="Pulse Rate" />
-                  <TextInput
-                    name="pulse_rate"
-                    id="pulse_rate"
-                    type="number"
-                    class="mt-1 block w-full"
-                    placeholder=" "
-                    v-model="form.pulse_rate"
-                    autofocus
-                    autocomplete="pulse_rate"
-                  />
-
-                  <InputError class="mt-2" :message="form.errors.pulse_rate" />
-                </div>
-
-                <div class="relative z-0 w-full group" v-if="patient.sex === 0">
-                  <InputLabel for="is_pregnant" value="Is Pregnant" />
+                  <InputLabel for="office" value="Office" />
                   <select
-                    name="is_pregnant"
-                    id="is_pregnant"
-                    v-model="form.is_pregnant"
+                    name="office"
+                    id="office"
+                    v-model="form.office_id"
                     required
                     class="w-full border-gray-300 mt-1 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                   >
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
+                    <option
+                      v-for="office in props.offices"
+                      :key="office.id"
+                      :value="office.id"
+                    >
+                      {{ office.name }}
+                    </option>
                   </select>
 
-                  <InputError class="mt-2" :message="form.errors.is_pregnant" />
+                  <InputError class="mt-2" :message="form.errors.office" />
                 </div>
-              </div>
-              <p class="font-bold text-xl mt-8">Category</p>
 
-              <div class="grid md:gap-6 mt-4">
-                <div class="relative w-full mb-6 group">
-                  <InputLabel for="service_id" value="Services" />
-                  <multiselect
-                    v-model="form.services"
-                    :options="services"
-                    :multiple="true"
-                    :close-on-select="false"
-                    placeholder="Select Services"
-                    label="name"
-                    track-by="id"
-                    :preselect-first="false"
-                    class="mt-1"
-                  />
-                  <InputError class="mt-2" :message="form.errors.service_id" />
+                <div class="md:gap-6 mt-4">
+                  <div class="relative z-0 w-full mb-6 group">
+                    <InputLabel
+                      class="inline-block"
+                      for="is_positive"
+                      value="Is Positive"
+                    />
+                    <Checkbox
+                      name="is_positive"
+                      id="is_positive"
+                      class="mt-1 block"
+                      v-model="form.is_positive"
+                      :checked="form.is_positive"
+                      autocomplete="encounter_date"
+                    />
+                  </div>
                 </div>
-              </div>
+              </template>
 
-              <div class="grid md:gap-6">
-                <div class="relative w-full mb-6 group">
-                  <InputLabel for="remarks" value="Remarks" />
-                  <textarea
-                    name="remarks"
-                    v-model="form.remarks"
-                    id="remarks"
-                    rows="4"
-                    class="block mt-1 p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  ></textarea>
+              <template v-if="form.event_id !== 12">
+                <p class="font-bold text-xl mt-10">Vital Signs</p>
+                <div class="grid md:grid-cols-3 md:gap-6">
+                  <div class="relative z-0 w-full mb-6 group">
+                    <InputLabel for="temperature" value="Temperature (deg)" />
+                    <TextInput
+                      name="temperature"
+                      id="temperature"
+                      type="number"
+                      step="0.1"
+                      class="mt-1 block w-full"
+                      placeholder=" "
+                      v-model="form.temperature"
+                      autofocus
+                      autocomplete="temperature"
+                    />
 
-                  <InputError class="mt-2" :message="form.errors.remarks" />
+                    <InputError
+                      class="mt-2"
+                      :message="form.errors.temperature"
+                    />
+                  </div>
+
+                  <div class="relative z-0 w-full mb-6 group">
+                    <InputLabel for="bp_systolic" value="BP Systolic" />
+                    <TextInput
+                      name="bp_systolic"
+                      id="bp_systolic"
+                      type="number"
+                      class="mt-1 block w-full"
+                      placeholder="120"
+                      v-model="form.bp_systolic"
+                      autofocus
+                      autocomplete="bp_systolic"
+                    />
+
+                    <InputError
+                      class="mt-2"
+                      :message="form.errors.temperature"
+                    />
+                  </div>
+
+                  <div class="relative z-0 w-full mb-6 group">
+                    <InputLabel for="bp_diastolic" value="BP Diastolic" />
+                    <TextInput
+                      name="bp_diastolic"
+                      id="bp_diastolic"
+                      type="number"
+                      class="mt-1 block w-full"
+                      placeholder="80"
+                      v-model="form.bp_diastolic"
+                      autofocus
+                      autocomplete="bp_diastolic"
+                    />
+
+                    <InputError
+                      class="mt-2"
+                      :message="form.errors.bp_diastolic"
+                    />
+                  </div>
                 </div>
-              </div>
 
+                <div class="grid md:grid-cols-3 md:gap-6">
+                  <div class="relative z-0 w-full group">
+                    <InputLabel
+                      for="respiratory_rate"
+                      value="Respiratory Rate"
+                    />
+                    <TextInput
+                      name="respiratory_rate"
+                      id="respiratory_rate"
+                      type="number"
+                      class="mt-1 block w-full"
+                      placeholder=" "
+                      v-model="form.respiratory_rate"
+                      autofocus
+                      autocomplete="respiratory_rate"
+                    />
+
+                    <InputError
+                      class="mt-2"
+                      :message="form.errors.respiratory_rate"
+                    />
+                  </div>
+
+                  <div class="relative z-0 w-full group">
+                    <InputLabel
+                      for="oxygen_saturation"
+                      value="Oxygen Saturation (%)"
+                    />
+                    <TextInput
+                      name="oxygen_saturation"
+                      id="oxygen_saturation"
+                      type="number"
+                      class="mt-1 block w-full"
+                      placeholder=" "
+                      v-model="form.oxygen_saturation"
+                      autofocus
+                      autocomplete="oxygen_saturation"
+                    />
+
+                    <InputError
+                      class="mt-2"
+                      :message="form.errors.oxygen_saturation"
+                    />
+                  </div>
+
+                  <div class="relative z-0 w-full group">
+                    <InputLabel for="pulse_rate" value="Pulse Rate" />
+                    <TextInput
+                      name="pulse_rate"
+                      id="pulse_rate"
+                      type="number"
+                      class="mt-1 block w-full"
+                      placeholder=" "
+                      v-model="form.pulse_rate"
+                      autofocus
+                      autocomplete="pulse_rate"
+                    />
+
+                    <InputError
+                      class="mt-2"
+                      :message="form.errors.pulse_rate"
+                    />
+                  </div>
+
+                  <div
+                    class="relative z-0 w-full group"
+                    v-if="patient.sex === 0"
+                  >
+                    <InputLabel for="is_pregnant" value="Is Pregnant" />
+                    <select
+                      name="is_pregnant"
+                      id="is_pregnant"
+                      v-model="form.is_pregnant"
+                      required
+                      class="w-full border-gray-300 mt-1 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                    >
+                      <option value="0">No</option>
+                      <option value="1">Yes</option>
+                    </select>
+
+                    <InputError
+                      class="mt-2"
+                      :message="form.errors.is_pregnant"
+                    />
+                  </div>
+                </div>
+                <p class="font-bold text-xl mt-8">Category</p>
+
+                <div class="grid md:gap-6 mt-4">
+                  <div class="relative w-full mb-6 group">
+                    <InputLabel for="service_id" value="Services" />
+                    <multiselect
+                      v-model="form.services"
+                      :options="services"
+                      :multiple="true"
+                      :close-on-select="false"
+                      placeholder="Select Services"
+                      label="name"
+                      track-by="id"
+                      :preselect-first="false"
+                      class="mt-1"
+                    />
+                    <InputError
+                      class="mt-2"
+                      :message="form.errors.service_id"
+                    />
+                  </div>
+                </div>
+
+                <div class="grid md:gap-6">
+                  <div class="relative w-full mb-6 group">
+                    <InputLabel for="remarks" value="Remarks" />
+                    <textarea
+                      name="remarks"
+                      v-model="form.remarks"
+                      id="remarks"
+                      rows="4"
+                      class="block mt-1 p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    ></textarea>
+
+                    <InputError class="mt-2" :message="form.errors.remarks" />
+                  </div>
+                </div>
+              </template>
               <button
                 type="submit"
                 :class="{ 'opacity-25 cursor-not-allowed': form.processing }"

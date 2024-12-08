@@ -105,6 +105,7 @@ class EncounterController extends Controller
             'diagnoses' => Diagnosis::all(),
             'events' => Event::where('status', 1)->get(),
             'services' => Service::where('status', 1)->orderBy('name', 'asc')->get(),
+            'offices' => Office::orderBy('name', 'asc')->get(),
         ]);
     }
 
@@ -130,7 +131,7 @@ class EncounterController extends Controller
                 'services' => 'array|exists:services,id',
                 'remarks' => 'nullable|string',
                 'is_positive' => 'nullable|boolean',
-                'office' => 'nullable|exists:offices,id',
+                'office_id' => 'nullable|exists:offices,id',
             ]);
 
             $encounter->update($validated);

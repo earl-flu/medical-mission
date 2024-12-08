@@ -16,6 +16,8 @@ class Encounter extends Model
 
     protected $appends = ['event_name'];
 
+    const DRUG_EVENT_CODE = 12;
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()

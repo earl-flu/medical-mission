@@ -3,6 +3,7 @@
 use App\Http\Controllers\BarangayController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiagnosisController;
+use App\Http\Controllers\DrugDashboardController;
 use App\Http\Controllers\EncounterController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\GuestPageController;
@@ -79,7 +80,7 @@ Route::middleware('auth')->group(function () {
     // Offices Route
     Route::resource('offices', OfficeController::class);
 
-    // API routes
+    // API routes for dashboard
     Route::prefix('api')->group(function () {
         Route::get('/barangays/{municipalityId}', [BarangayController::class, 'getBarangays'])->name('barangays');
         Route::controller(DashboardController::class)->group(function () {
@@ -93,12 +94,23 @@ Route::middleware('auth')->group(function () {
         });
     });
 
+    // API routes for Drugs Dashboard
+    Route::prefix('api/drugs')->group(function () {
+        Route::controller(DrugDashboardController::class)->group(function () {
+            Route::get('/offices', 'getTotalPerOffice')->name('drugs.getTotalPerOffice');
+            Route::get('/offices/positive', 'getPositivePerOffice')->name('drugs.getPositivePerOffice');
+            Route::get('/total/positive-negative', 'getTotalPositiveNegative')->name('drugs.getTotalPositiveNegative');
+        });
+    });
+
     // Export routes
     Route::controller(ExportController::class)->group(function () {
         Route::get('/orderItems/export', 'exportOrderedItems');
         Route::get('/disposedItemsTotal/export', 'exportDisposedItemsTotal');
         Route::get('/inventory/export', 'exportInventory');
     });
+
+    Route::get('/test', [DrugDashboardController::class, 'getTotals']);
 });
 
 

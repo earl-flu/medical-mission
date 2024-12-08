@@ -50,7 +50,7 @@ class OfficeController extends Controller
     public function edit($id)
     {
         $office = Office::findOrFail($id);
-        return view('offices.edit', compact('office'));
+        return Inertia::render('Office/Edit', ['office' => $office]);
     }
 
     // Update an existing office
