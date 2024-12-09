@@ -6,7 +6,7 @@ use App\Models\Employment;
 use App\Models\Encounter;
 use App\Models\Office;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 use Inertia\Inertia;
 
 class DrugDashboardController extends Controller
@@ -90,14 +90,49 @@ class DrugDashboardController extends Controller
             ->values() // Ensure we get a sequential array
             ->sortByDesc('total') // Sort by total in descending order
             ->toArray(); // Convert to array
-        // dd($totalPerEmployment);
+
         return response()->json($totalPerEmployment);
     }
 
-
-    public function positivePatients()
+    public function getPositiveByEmployment()
     {
-        $positivePatients = Encounter::where('is_positive', 1)->with(['patient', 'office'])->get();
-        return $positivePatients;
+        $totalByEmployment = Encounter::where('event_id', Encounter::DRUG_EVENT_CODE)
+            ->where('is_positive', 1)
+            ->get()
+            ->groupBy('employment_id')
+            ->map(function ($encounters, $employmentId) {
+                $officeName = Employment::find($employmentId)->name ?? 'Unknown Employment';
+                return ['employmentName' => $officeName, 'total' => $encounters->count()]; // Updated format
+            })
+            ->values() // Ensure we get a sequential array
+            ->sortByDesc('total') // Sort by total in descending order
+            ->toArray(); // Convert to array
+
+        return response()->json($totalByEmployment);
+    }
+
+
+    public function positiveList()
+    {
+        $totalPositive =  Encounter::where('event_id', Encounter::DRUG_EVENT_CODE)
+            ->where('is_positive', 1)
+            ->count();
+
+        $positiveEncounters = Encounter::where('event_id', Encounter::DRUG_EVENT_CODE)
+            ->where('is_positive', 1)
+            ->with(['patient', 'office'])
+            ->when(FacadesRequest::input('search'), function ($query, $search) {
+                $query->whereHas('patient', function ($subQuery) use ($search) {
+                    $subQuery->where('first_name', 'like', "%{$search}%");
+                });
+            })
+            ->paginate(10)
+            ->withQueryString();
+
+        return Inertia::render('Drugs/PositiveIndex', [
+            'positiveEncounters' => $positiveEncounters,
+            'filters' => FacadesRequest::only(['search']),
+            'totalPositive' => $totalPositive
+        ]);
     }
 }

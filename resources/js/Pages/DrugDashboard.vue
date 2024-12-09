@@ -11,6 +11,7 @@ import DrugTestOfficeChart from "@/Pages/Drugs/DrugTestOfficeChart.vue";
 import PositivePerOfficeChart from "@/Pages/Drugs/PositivePerOfficeChart.vue";
 import PositiveNegativeChart from "@/Pages/Drugs/PositiveNegativeChart.vue";
 import EmploymentPieChart from "@/Pages/Drugs/EmploymentPieChart.vue";
+import PositiveByEmploymentPieChart from "@/Pages/Drugs/PositiveByEmploymentPieChart.vue";
 import TotalCards from "@/Pages/Drugs/TotalCards.vue";
 import "vue-select/dist/vue-select.css";
 import VueSelect from "vue-select";
@@ -30,7 +31,7 @@ import EncountersByProgramChart from "@/Components/EncountersByProgramChart.vue"
       <h2
         class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight"
       >
-        Drug Test Dashboard
+        Drug Test Dashboard (TEST ONLY)
       </h2>
     </template>
 
@@ -49,7 +50,7 @@ import EncountersByProgramChart from "@/Components/EncountersByProgramChart.vue"
               <div
                 class="flex-1 bg-white shadow p-4 flex items-center justify-center flex-col gap-4"
               >
-                <PositivePerOfficeChart />
+                <PositiveNegativeChart />
               </div>
             </div>
 
@@ -58,17 +59,29 @@ import EncountersByProgramChart from "@/Components/EncountersByProgramChart.vue"
                 class="flex-1 bg-white shadow p-4 flex items-center justify-center flex-col gap-4"
                 style="height: 400px"
               >
-                <PositiveNegativeChart />
+                <PositivePerOfficeChart />
               </div>
+              <div
+                class="flex-1 bg-white shadow p-4 flex items-center justify-center flex-col gap-4"
+                style="height: 400px"
+              >
+                <PositiveByEmploymentPieChart />
+              </div>
+            </div>
+            <div class="flex gap-10 mt-20">
               <div
                 class="flex-1 bg-white shadow p-4 flex items-center justify-center flex-col gap-4"
                 style="height: 400px"
               >
                 <EmploymentPieChart />
               </div>
+              <div
+                class="flex-1 bg-white shadow p-4 flex items-center justify-center flex-col gap-4"
+                style="height: 400px"
+              >
+                <!-- <EmploymentPieChart /> -->
+              </div>
             </div>
-
-    
           </div>
         </div>
       </div>

@@ -94,6 +94,12 @@ Route::middleware('auth')->group(function () {
         });
     });
 
+    // Route for drugs
+    Route::prefix('drugs')->group(function () {
+        Route::get('/dashboard', [DrugDashboardController::class, 'index'])->name('drugs.dashboard');
+        Route::get('/positive', [DrugDashboardController::class, 'positiveList'])->name('drugs.positiveList');
+    });
+
     // API routes for Drugs Dashboard
     Route::prefix('api/drugs')->group(function () {
         Route::controller(DrugDashboardController::class)->group(function () {
@@ -102,6 +108,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/total/positive-negative', 'getTotalPositiveNegative')->name('drugs.getTotalPositiveNegative');
             Route::get('/employment-data', 'getTotalPerEmployment')->name('drugs.getTotalPerEmployment');
             Route::get('/totals', 'getTotals')->name('drugs.getTotals');
+            Route::get('/positive-by-employment', 'getPositiveByEmployment')->name('drugs.getPositiveByEmployment');
         });
     });
 
@@ -111,8 +118,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/disposedItemsTotal/export', 'exportDisposedItemsTotal');
         Route::get('/inventory/export', 'exportInventory');
     });
-
-    Route::get('/test', [DrugDashboardController::class, 'index']);
 });
 
 

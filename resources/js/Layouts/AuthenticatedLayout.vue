@@ -28,7 +28,7 @@ const showingNavigationDropdown = ref(false);
                   />
                 </Link>
               </div>
-  <span class="text-red-500 text-xs font-bold">TEST DB</span>
+              <span class="text-red-500 text-xs font-bold">TEST DB</span>
               <!-- Navigation Links -->
               <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                 <NavLink
@@ -36,6 +36,12 @@ const showingNavigationDropdown = ref(false);
                   :active="route().current('dashboard')"
                 >
                   Dashboard
+                </NavLink>
+                <NavLink
+                  :href="route('drugs.dashboard')"
+                  :active="route().current('drugs.dashboard')"
+                >
+                  Drugs Dashboard
                 </NavLink>
                 <NavLink
                   :href="route('patients.index')"
@@ -177,6 +183,25 @@ const showingNavigationDropdown = ref(false);
               :active="route().current('dashboard')"
             >
               Dashboard
+            </ResponsiveNavLink>
+            <ResponsiveNavLink
+              :href="route('drugs.dashboard')"
+              :active="route().current('drugs.dashboard')"
+            >
+              Drugs Dashboard
+            </ResponsiveNavLink>
+            <ResponsiveNavLink
+              :href="route('patients.index')"
+              :active="
+                route().current('patients.index') ||
+                route().current('patients.show') ||
+                route().current('patients.edit') ||
+                route().current('patients.create') ||
+                route().current('medical-records.edit') ||
+                route().current('order-items.create')
+              "
+            >
+              Patients
             </ResponsiveNavLink>
           </div>
 
