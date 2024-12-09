@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employment;
 use App\Models\Encounter;
 use App\Models\Office;
 use Illuminate\Http\Request;
@@ -18,15 +19,12 @@ class DrugDashboardController extends Controller
     public function getTotals()
     {
         $totalPatients = $this->getTotalPatients();
-        $totalPerOffice = $this->getTotalPerOffice();
-        $positivePerOffice = $this->getPositivePerOffice();
-        $totalPositiveNegative = $this->getTotalPositiveNegative();
-        // dd($totalPositiveNegative);
-        return Inertia::render('DrugDashboard', [
+        $results = ($this->getTotalPositiveNegative());
+
+        return response()->json([
             'totalPatients' => $totalPatients,
-            'totalPerOffice' => $totalPerOffice,
-            'positivePerOffice' => $positivePerOffice,
-            'totalPositiveNegative' => $totalPositiveNegative
+            'positive' => $results['positive'],
+            'negative' => $results['negative'],
         ]);
     }
 
@@ -78,6 +76,22 @@ class DrugDashboardController extends Controller
             ->mapWithKeys(function ($encounters, $type) {
                 return [$type => $encounters->count()];
             });
+    }
+
+    public function getTotalPerEmployment()
+    {
+        $totalPerEmployment = Encounter::where('event_id', Encounter::DRUG_EVENT_CODE)
+            ->get()
+            ->groupBy('employment_id')
+            ->map(function ($encounters, $employmentId) {
+                $officeName = Employment::find($employmentId)->name ?? 'Unknown Employment';
+                return ['employmentName' => $officeName, 'total' => $encounters->count()]; // Updated format
+            })
+            ->values() // Ensure we get a sequential array
+            ->sortByDesc('total') // Sort by total in descending order
+            ->toArray(); // Convert to array
+        // dd($totalPerEmployment);
+        return response()->json($totalPerEmployment);
     }
 
 

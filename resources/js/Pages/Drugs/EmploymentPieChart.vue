@@ -13,7 +13,7 @@ const chartOptions = computed(() => {
     },
     labels: chartData.value ? chartData.value.labels : [],
     title: {
-      text: "Overall Results",
+      text: "Overall Employment",
       align: "center",
       margin: 20,
       offsetY: 0,
@@ -23,7 +23,7 @@ const chartOptions = computed(() => {
         color: "#2D3748",
       },
     },
-    colors: ["#FF0000", "#008FFB"], // Specific colors for each data
+    // colors: ["#FF0000", "#008FFB"], // Specific colors for each data
     responsive: [
       {
         breakpoint: 480,
@@ -45,12 +45,12 @@ const series = computed(() => (chartData.value ? chartData.value.data : []));
 // Fetch data from the API
 const fetchData = async () => {
   try {
-    const response = await fetch(route("drugs.getTotalPositiveNegative"));
+    const response = await fetch(route("drugs.getTotalPerEmployment"));
     const data = await response.json();
 
     chartData.value = {
-      labels: ["Positive", "Negative"],
-      data: [data.positive, data.negative],
+      labels: data.map((d) => d.employmentName),
+      data: data.map((d) => d.total),
     };
   } catch (error) {
     console.error("Error fetching data:", error);

@@ -10,6 +10,8 @@ import InputLabel from "@/Components/InputLabel.vue";
 import DrugTestOfficeChart from "@/Pages/Drugs/DrugTestOfficeChart.vue";
 import PositivePerOfficeChart from "@/Pages/Drugs/PositivePerOfficeChart.vue";
 import PositiveNegativeChart from "@/Pages/Drugs/PositiveNegativeChart.vue";
+import EmploymentPieChart from "@/Pages/Drugs/EmploymentPieChart.vue";
+import TotalCards from "@/Pages/Drugs/TotalCards.vue";
 import "vue-select/dist/vue-select.css";
 import VueSelect from "vue-select";
 import { Head } from "@inertiajs/vue3";
@@ -36,38 +38,19 @@ import EncountersByProgramChart from "@/Components/EncountersByProgramChart.vue"
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="overflow-hidden sm:rounded-lg">
           <div class="p-6 text-gray-900 dark:text-gray-100">
-            <!-- <DashboardCard :eventId="selectedEventId" /> -->
-
+            <TotalCards />
             <div class="flex gap-10 mt-20">
               <div
                 class="flex-1 bg-white shadow p-4 flex items-center justify-center flex-col gap-4"
-                style="height: 500px"
+                style="height: 400px"
               >
                 <DrugTestOfficeChart />
               </div>
-            </div>
-
-            <div class="flex gap-10 mt-20">
               <div
                 class="flex-1 bg-white shadow p-4 flex items-center justify-center flex-col gap-4"
-                style="height: 500px"
-              >
-                <!-- <AvailableStocksChart /> -->
-              </div>
-            </div>
-
-            <div class="flex gap-10 mt-20">
-              <div
-                class="flex-1 bg-white shadow p-4 flex items-center justify-center flex-col gap-4"
-                style="height: 400px"
               >
                 <PositivePerOfficeChart />
               </div>
-              <div
-                class="flex-1 bg-white shadow p-4 flex items-center justify-center flex-col gap-4"
-              >
-                <PositiveNegativeChart />
-              </div>
             </div>
 
             <div class="flex gap-10 mt-20">
@@ -75,19 +58,17 @@ import EncountersByProgramChart from "@/Components/EncountersByProgramChart.vue"
                 class="flex-1 bg-white shadow p-4 flex items-center justify-center flex-col gap-4"
                 style="height: 400px"
               >
-                <!-- <MunicipalityChart :eventId="selectedEventId" /> -->
+                <PositiveNegativeChart />
               </div>
               <div
                 class="flex-1 bg-white shadow p-4 flex items-center justify-center flex-col gap-4"
                 style="height: 400px"
               >
-                <!-- <EncountersByProgramChart :eventId="selectedEventId" /> -->
+                <EmploymentPieChart />
               </div>
             </div>
 
-            <div class="shadow-md p-4 mt-10">
-              <!-- <Bar :options="chartOptions('Disposed Items')" :data="disposedMedsChartData" /> -->
-            </div>
+    
           </div>
         </div>
       </div>

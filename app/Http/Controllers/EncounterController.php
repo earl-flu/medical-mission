@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Diagnosis;
+use App\Models\Employment;
 use App\Models\Encounter;
 use App\Models\Event;
 use App\Models\Office;
@@ -34,6 +35,7 @@ class EncounterController extends Controller
             'events' => Event::where('status', 1)->orderBy('name', 'asc')->get(),
             'services' => Service::where('status', 1)->orderBy('name', 'asc')->get(),
             'offices' => Office::where('is_active', 1)->orderBy('name', 'asc')->get(),
+            'employments' => Employment::where('is_active', 1)->orderBy('name', 'asc')->get(),
             'patient' => $patient,
         ]);
     }
@@ -62,6 +64,7 @@ class EncounterController extends Controller
                 'remarks' => 'nullable|string',
                 'is_positive' => 'nullable|boolean',
                 'office_id' => 'nullable|exists:offices,id',
+                'employment_id' => 'nullable|exists:employments,id',
             ]);
             $validated['age'] = Carbon::parse($validated['patient_birthdate'])->age;
             $validated['encoded_by'] = Auth::id();
@@ -79,6 +82,7 @@ class EncounterController extends Controller
     public function show(Encounter $encounter)
     {
         $encounter->load('patient');
+        $encounter->load('employment');
         if ($encounter->office) {
             $office = $encounter->office;
             $officeName = "{$office->abbreviation} - {$office->name}";
@@ -106,6 +110,7 @@ class EncounterController extends Controller
             'events' => Event::where('status', 1)->get(),
             'services' => Service::where('status', 1)->orderBy('name', 'asc')->get(),
             'offices' => Office::orderBy('name', 'asc')->get(),
+            'employments' => Employment::where('is_active', 1)->orderBy('name', 'asc')->get(),
         ]);
     }
 
@@ -132,6 +137,7 @@ class EncounterController extends Controller
                 'remarks' => 'nullable|string',
                 'is_positive' => 'nullable|boolean',
                 'office_id' => 'nullable|exists:offices,id',
+                'employment_id' => 'nullable|exists:employments,id',
             ]);
 
             $encounter->update($validated);

@@ -100,6 +100,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/offices', 'getTotalPerOffice')->name('drugs.getTotalPerOffice');
             Route::get('/offices/positive', 'getPositivePerOffice')->name('drugs.getPositivePerOffice');
             Route::get('/total/positive-negative', 'getTotalPositiveNegative')->name('drugs.getTotalPositiveNegative');
+            Route::get('/employment-data', 'getTotalPerEmployment')->name('drugs.getTotalPerEmployment');
+            Route::get('/totals', 'getTotals')->name('drugs.getTotals');
         });
     });
 
@@ -110,7 +112,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/inventory/export', 'exportInventory');
     });
 
-    Route::get('/test', [DrugDashboardController::class, 'getTotals']);
+    Route::get('/test', [DrugDashboardController::class, 'index']);
 });
 
 

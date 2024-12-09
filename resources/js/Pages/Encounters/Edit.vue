@@ -34,6 +34,10 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  employments: {
+    type: Array,
+    required: true,
+  },
   services: {
     type: Array,
     required: true,
@@ -185,15 +189,45 @@ function updateEncounter() {
                   <InputError class="mt-2" :message="form.errors.office" />
                 </div>
 
+                <div class="relative z-0 w-full group mt-4">
+                  <InputLabel for="employment" value="Employment" />
+                  <select
+                    name="employment"
+                    id="employment"
+                    v-model="form.employment_id"
+                    required
+                    class="w-full border-gray-300 mt-1 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                  >
+                    <option
+                      v-for="employment in props.employments"
+                      :key="employment.id"
+                      :value="employment.id"
+                    >
+                      {{ employment.name }}
+                    </option>
+                  </select>
+
+                  <InputError
+                    class="mt-2"
+                    :message="form.errors.employment_id"
+                  />
+                </div>
+
                 <div class="md:gap-6 mt-4">
                   <div class="relative z-0 w-full mb-6 group">
-                    <InputLabel class="inline-block" for="is_positive" value="Is Positive" />
+                    <InputLabel
+                      class="inline-block"
+                      for="is_positive"
+                      value="Is Positive"
+                    />
                     <Checkbox
                       name="is_positive"
                       id="is_positive"
                       class="mt-1 block"
                       v-model="form.is_positive"
-                      :checked="form.is_positive === 1 || form.is_positive === true"
+                      :checked="
+                        form.is_positive === 1 || form.is_positive === true
+                      "
                       autocomplete="encounter_date"
                     />
                   </div>

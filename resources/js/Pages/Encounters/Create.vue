@@ -34,6 +34,10 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  employments: {
+    type: Array,
+    required: true,
+  },
   diagnoses: {
     type: Array,
     required: true,
@@ -76,6 +80,7 @@ const form = useForm({
   pulse_rate: "",
   remarks: "",
   office_id: null,
+  employment_id: null,
   is_positive: false,
   age: age,
   event_id: props.events.length > 0 ? props.events[0].id : undefined,
@@ -202,7 +207,31 @@ function submitEncounter() {
                     </option>
                   </select>
 
-                  <InputError class="mt-2" :message="form.errors.office" />
+                  <InputError class="mt-2" :message="form.errors.office_id" />
+                </div>
+
+                <div class="relative z-0 w-full group mt-4">
+                  <InputLabel for="employment" value="Employment" />
+                  <select
+                    name="employment"
+                    id="employment"
+                    v-model="form.employment_id"
+                    required
+                    class="w-full border-gray-300 mt-1 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                  >
+                    <option
+                      v-for="employment in props.employments"
+                      :key="employment.id"
+                      :value="employment.id"
+                    >
+                      {{ employment.name }}
+                    </option>
+                  </select>
+
+                  <InputError
+                    class="mt-2"
+                    :message="form.errors.employment_id"
+                  />
                 </div>
 
                 <div class="md:gap-6 mt-4">
