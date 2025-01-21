@@ -31,7 +31,7 @@ import EncountersByProgramChart from "@/Components/EncountersByProgramChart.vue"
       <h2
         class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight"
       >
-        Drug Test Dashboard (TEST ONLY)
+        Drug Test Dashboard
       </h2>
     </template>
 

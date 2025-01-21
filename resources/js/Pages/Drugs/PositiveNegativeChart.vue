@@ -50,7 +50,7 @@ const fetchData = async () => {
 
     chartData.value = {
       labels: ["Positive", "Negative"],
-      data: [data.positive, data.negative],
+      data: [data.positive ?? 0, data.negative ?? 0],
     };
   } catch (error) {
     console.error("Error fetching data:", error);

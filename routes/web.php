@@ -99,6 +99,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard', [DrugDashboardController::class, 'index'])->name('drugs.dashboard');
         Route::get('/positive', [DrugDashboardController::class, 'positiveList'])->name('drugs.positiveList');
     });
+   
+    Route::get('/test', function () {
+        return app()->make(DrugDashboardController::class)->getTotalPerOffice();
+    });
+
 
     // API routes for Drugs Dashboard
     Route::prefix('api/drugs')->group(function () {

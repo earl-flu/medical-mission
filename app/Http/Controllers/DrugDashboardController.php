@@ -22,9 +22,9 @@ class DrugDashboardController extends Controller
         $results = ($this->getTotalPositiveNegative());
 
         return response()->json([
-            'totalPatients' => $totalPatients,
-            'positive' => $results['positive'],
-            'negative' => $results['negative'],
+            'totalPatients' => $totalPatients ?? 0,
+            'positive' => $results['positive'] ?? 0,
+            'negative' => $results['negative'] ?? 0,
         ]);
     }
 
@@ -45,7 +45,6 @@ class DrugDashboardController extends Controller
             ->values() // Ensure we get a sequential array
             ->sortByDesc('total') // Sort by total in descending order
             ->toArray(); // Convert to array
-
         return response()->json($totalPerOffice);
     }
 

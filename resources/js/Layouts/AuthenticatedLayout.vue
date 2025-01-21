@@ -28,7 +28,7 @@ const showingNavigationDropdown = ref(false);
                   />
                 </Link>
               </div>
-              <span class="text-red-500 text-xs font-bold">TEST DB</span>
+              <!-- <span class="text-red-500 text-xs font-bold">TEST DB</span> -->
               <!-- Navigation Links -->
               <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                 <NavLink

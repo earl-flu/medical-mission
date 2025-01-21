@@ -120,10 +120,12 @@ const series = computed(() => [
 
 // Fetch data from the API
 const fetchData = async () => {
+  console.log("testttt");
   try {
     const response = await fetch(route("drugs.getTotalPerOffice"));
+    console.log(response);
     const data = await response.json();
-    
+    console.log(data);
     chartData.value = {
       labels: data.map((d) => d.officeName),
       data: data.map((d) => d.total),

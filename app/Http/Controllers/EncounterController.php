@@ -82,7 +82,7 @@ class EncounterController extends Controller
     public function show(Encounter $encounter)
     {
         $encounter->load('patient');
-        $encounter->load('employment');
+        // $encounter->load('employment');
         if ($encounter->office) {
             $office = $encounter->office;
             $officeName = "{$office->abbreviation} - {$office->name}";
