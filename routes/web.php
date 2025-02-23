@@ -35,7 +35,7 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
-Route::get('/view/items', [GuestPageController::class, 'viewItems'])->name('view.items');
+// Route::get('/view/items', [GuestPageController::class, 'viewItems'])->name('view.items');
 // Route::get('/view/low-stock-items', [GuestPageController::class, 'viewLowStockItems'])->name('view.lowStockItems');
 
 //ADD GROUP FOR AUTH MIDDLEWARE
@@ -124,6 +124,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/inventory/export', 'exportInventory');
     });
 });
-
+Route::get('/test', [DrugDashboardController::class, 'getTotalPerOffice']);
 
 require __DIR__ . '/auth.php';

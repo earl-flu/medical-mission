@@ -1,156 +1,97 @@
-<script setup>
-import { ref, onMounted, computed, watch } from "vue";
-import VueApexCharts from "vue3-apexcharts";
-
-// Props in script setup
-
-const chartData = ref(null);
-
-// Add generatePastelColors function
-const generatePastelColors = (numColors) => {
-  const pastelColors = [];
-  for (let i = 0; i < numColors; i++) {
-    const hue = (i * 60) % 360; // Using 60 degrees for a different distribution
-    const saturation = 50 + Math.random() * 20; // Different saturation range
-    const lightness = 70 + Math.random() * 15; // Different lightness range
-    pastelColors.push(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
-  }
-  return pastelColors;
-};
-
-// Computed properties for chart options and series
-const chartOptions = computed(() => {
-  const dataLength = chartData.value?.data.length || 0;
-  const pastelColors = generatePastelColors(dataLength);
-
-  return {
-    chart: {
-      type: "bar",
-      height: "100%",
-      width: "100%",
-      toolbar: {
-        show: true,
-      },
-      fontFamily: "Poppins, sans-serif",
-    },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        columnWidth: "65%",
-        borderRadius: 8,
-        distributed: true,
-      },
-    },
-    dataLabels: {
-      enabled: true,
-      formatter: function (val) {
-        return val;
-      },
-      offsetY: -20,
-      style: {
-        fontSize: "12px",
-        colors: ["#304758"],
-      },
-    },
-    stroke: {
-      show: true,
-      width: 2,
-      colors: ["transparent"],
-    },
-    xaxis: {
-      categories: chartData.value ? chartData.value.labels : [],
-      labels: {
-        style: {
-          colors: "#718096",
-          fontSize: "12px",
-        },
-      },
-    },
-    yaxis: {
-      title: {
-        text: "Total Tested",
-        style: {
-          color: "#4A5568",
-          fontSize: "14px",
-          fontWeight: 600,
-        },
-      },
-      labels: {
-        style: {
-          colors: "#718096",
-          fontSize: "12px",
-        },
-      },
-    },
-    title: {
-      text: "Offices",
-      align: "center",
-      margin: 20,
-      offsetY: 0,
-      style: {
-        fontSize: "16px",
-        fontWeight: "bold",
-        color: "#2D3748",
-      },
-    },
-    fill: {
-      opacity: 1,
-    },
-    tooltip: {
-      y: {
-        formatter: (val) => `${val}`,
-      },
-    },
-    colors: pastelColors,
-    grid: {
-      borderColor: "#E2E8F0",
-    },
-    legend: {
-      show: false,
-    },
-  };
-});
-
-const series = computed(() => [
-  {
-    name: "Quantity",
-    data: chartData.value ? chartData.value.data : [],
-  },
-]);
-
-// Fetch data from the API
-const fetchData = async () => {
-  console.log("testttt");
-  try {
-    const response = await fetch(route("drugs.getTotalPerOffice"));
-    console.log(response);
-    const data = await response.json();
-    console.log(data);
-    chartData.value = {
-      labels: data.map((d) => d.officeName),
-      data: data.map((d) => d.total),
-    };
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-};
-
-onMounted(fetchData);
-</script>
-
 <template>
   <div class="chart-container">
     <apexchart
-      v-if="chartData"
-      width="100%"
-      height="100%"
+      v-if="props.data && props.data.length > 0"
       type="bar"
+      height="350"
       :options="chartOptions"
       :series="series"
     />
-    <p v-else class="loading-text">Loading chart data...</p>
+    <div v-else class="loading-text">Loading data...</div>
   </div>
 </template>
+
+<script setup>
+import { computed } from "vue";
+
+const props = defineProps({
+  data: {
+    type: Array,
+    required: true,
+  },
+});
+
+const series = computed(() => {
+  if (!props.data || props.data.length === 0) return [];
+
+  return [
+    {
+      name: "Total Examined",
+      data: props.data
+        .slice() // Create a shallow copy to avoid mutating props
+        .sort((a, b) => b.total - a.total) // Sort in descending order (highest total first)
+        .map((item) => item.total),
+    },
+  ];
+});
+
+const chartOptions = computed(() => ({
+  chart: {
+    type: "bar",
+    toolbar: {
+      show: true,
+    },
+  },
+  plotOptions: {
+    bar: {
+      horizontal: false,
+      columnWidth: "55%",
+      borderRadius: 4,
+    },
+  },
+  dataLabels: {
+    enabled: false,
+  },
+  stroke: {
+    show: true,
+    width: 2,
+    colors: ["transparent"],
+  },
+  xaxis: {
+    categories: props.data
+      .slice() // Create a shallow copy to avoid mutating props
+      .sort((a, b) => b.total - a.total) // Sort in descending order (highest total first)
+      .map((item) => item.office_name),
+    title: {
+      text: "Offices",
+    },
+  },
+  yaxis: {
+    title: {
+      text: "Total Examined",
+    },
+  },
+  fill: {
+    opacity: 1,
+  },
+  tooltip: {
+    y: {
+      formatter: function (val) {
+        return val;
+      },
+    },
+  },
+  colors: ["#4F46E5"],
+  title: {
+    text: "Total Drug Tests Per Office",
+    align: "center",
+    style: {
+      fontSize: "20px",
+      fontWeight: "bold",
+    },
+  },
+}));
+</script>
 
 <style scoped>
 .chart-container {

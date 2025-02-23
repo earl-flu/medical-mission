@@ -1,17 +1,54 @@
+<template>
+  <div class="chart-container">
+    <apexchart
+      v-if="props.data && props.data.length > 0"
+      width="100%"
+      height="100%"
+      type="pie"
+      :options="chartOptions"
+      :series="series"
+    />
+    <p v-else class="loading-text">Loading chart data...</p>
+  </div>
+</template>
+
 <script setup>
 import { ref, onMounted, computed, watch } from "vue";
-import VueApexCharts from "vue3-apexcharts";
 
-const chartData = ref(null);
+const props = defineProps({
+  data: {
+    type: Array,
+    required: true,
+  },
+});
 
-// Computed properties for chart options and series
+const chartData = computed(() => {
+  if (!props.data || props.data.length === 0) return [];
+
+  const totalPermanent = props.data.reduce(
+    (sum, item) => sum + Number(item.total_permanent),
+    0
+  );
+  const totalJobOrder = props.data.reduce(
+    (sum, item) => sum + Number(item.total_job_order),
+    0
+  );
+
+  return {
+    labels: ["Job Order", "Permanent"],
+    data: [totalJobOrder, totalPermanent],
+  };
+});
+
+const series = computed(() => [...chartData.value.data]);
+
 const chartOptions = computed(() => {
   return {
     chart: {
       width: 380,
       type: "pie",
     },
-    labels: chartData.value ? chartData.value.labels : [],
+    labels: chartData.value.labels,
     title: {
       text: "Overall Employment",
       align: "center",
@@ -40,39 +77,8 @@ const chartOptions = computed(() => {
   };
 });
 
-const series = computed(() => (chartData.value ? chartData.value.data : []));
-
-// Fetch data from the API
-const fetchData = async () => {
-  try {
-    const response = await fetch(route("drugs.getTotalPerEmployment"));
-    const data = await response.json();
-
-    chartData.value = {
-      labels: data.map((d) => d.employmentName),
-      data: data.map((d) => d.total),
-    };
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-};
-
-onMounted(fetchData);
+// const series = computed(() => (chartData.value ? chartData.value.data : []));
 </script>
-
-<template>
-  <div class="chart-container">
-    <apexchart
-      v-if="chartData"
-      width="100%"
-      height="100%"
-      type="pie"
-      :options="chartOptions"
-      :series="series"
-    />
-    <p v-else class="loading-text">Loading chart data...</p>
-  </div>
-</template>
 
 <style scoped>
 .chart-container {

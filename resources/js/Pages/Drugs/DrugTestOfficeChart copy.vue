@@ -1,42 +1,29 @@
-<template>
-  <div class="chart-container">
-    <apexchart
-      v-if="props.data && props.data.length > 0"
-      width="100%"
-      height="100%"
-      type="bar"
-      :options="chartOptions"
-      :series="series"
-    />
-    <p v-else class="loading-text">Loading chart data...</p>
-  </div>
-</template>
-
 <script setup>
 import { ref, onMounted, computed, watch } from "vue";
 import VueApexCharts from "vue3-apexcharts";
 
 const props = defineProps({
   data: {
-    type: Array,
+    type: Object,
     required: true,
   },
 });
 
-const generatePastelColors = (numColors) => {
-  const pastelColors = [];
-  for (let i = 0; i < numColors; i++) {
-    const hue = (i * 60) % 360; // Using 60 degrees for a different distribution
-    const saturation = 50 + Math.random() * 20; // Different saturation range
-    const lightness = 70 + Math.random() * 15; // Different lightness range
-    pastelColors.push(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
-  }
-  return pastelColors;
-};
+// Transform your data for ApexCharts
+const series = computed(() => {
+  if (!props.data) return [];
+
+  return [
+    {
+      name: "Total Drugs",
+      data: Object.values(props.data),
+    },
+  ];
+});
 
 // Computed properties for chart options and series
 const chartOptions = computed(() => {
-  const dataLength = props.data.length || 0;
+  const dataLength = officeData.value?.data.length || 0;
   const pastelColors = generatePastelColors(dataLength);
 
   return {
@@ -65,7 +52,7 @@ const chartOptions = computed(() => {
       offsetY: -20,
       style: {
         fontSize: "12px",
-        colors: ["#fff"],
+        colors: ["#304758"],
       },
     },
     stroke: {
@@ -74,10 +61,7 @@ const chartOptions = computed(() => {
       colors: ["transparent"],
     },
     xaxis: {
-      categories: props.data
-        .slice() // Create a shallow copy to avoid mutating props
-        .sort((a, b) => b.total_positive - a.total_positive) // Sort in descending order (highest total first)
-        .map((item) => item.office_name),
+      categories: chartData.value ? chartData.value.labels : [],
       labels: {
         style: {
           colors: "#718096",
@@ -87,7 +71,7 @@ const chartOptions = computed(() => {
     },
     yaxis: {
       title: {
-        text: "Total",
+        text: "Total Tested",
         style: {
           color: "#4A5568",
           fontSize: "14px",
@@ -102,7 +86,7 @@ const chartOptions = computed(() => {
       },
     },
     title: {
-      text: "Positive Cases by Office",
+      text: "Offices",
       align: "center",
       margin: 20,
       offsetY: 0,
@@ -120,7 +104,7 @@ const chartOptions = computed(() => {
         formatter: (val) => `${val}`,
       },
     },
-    colors: ["#FF0000"],
+    colors: pastelColors,
     grid: {
       borderColor: "#E2E8F0",
     },
@@ -132,14 +116,37 @@ const chartOptions = computed(() => {
 
 const series = computed(() => [
   {
-    name: "Positive",
-    data: props.data
-      .slice() // Create a shallow copy to avoid mutating props
-      .sort((a, b) => b.total_positive - a.total_positive) // Sort in descending order (highest total first)
-      .map((item) => item.total_positive),
+    name: "Quantity",
+    data: chartData.value ? chartData.value.data : [],
   },
 ]);
+
+// Add generatePastelColors function
+const generatePastelColors = (numColors) => {
+  const pastelColors = [];
+  for (let i = 0; i < numColors; i++) {
+    const hue = (i * 60) % 360; // Using 60 degrees for a different distribution
+    const saturation = 50 + Math.random() * 20; // Different saturation range
+    const lightness = 70 + Math.random() * 15; // Different lightness range
+    pastelColors.push(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
+  }
+  return pastelColors;
+};
 </script>
+
+<template>
+  <div class="chart-container">
+    <apexchart
+      v-if="chartData"
+      width="100%"
+      height="100%"
+      type="bar"
+      :options="chartOptions"
+      :series="series"
+    />
+    <p v-else class="loading-text">Loading chart data2...</p>
+  </div>
+</template>
 
 <style scoped>
 .chart-container {

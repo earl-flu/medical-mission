@@ -6,6 +6,7 @@ use App\Models\Employment;
 use App\Models\Encounter;
 use App\Models\Office;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request as FacadesRequest;
 use Inertia\Inertia;
 
@@ -35,16 +36,26 @@ class DrugDashboardController extends Controller
 
     public function getTotalPerOffice()
     {
-        $totalPerOffice = Encounter::where('event_id', Encounter::DRUG_EVENT_CODE)
-            ->get()
-            ->groupBy('office_id')
-            ->map(function ($encounters, $officeId) {
-                $officeName = Office::find($officeId)->name ?? 'Unknown Office';
-                return ['officeName' => $officeName, 'total' => $encounters->count()]; // Updated format
-            })
-            ->values() // Ensure we get a sequential array
-            ->sortByDesc('total') // Sort by total in descending order
-            ->toArray(); // Convert to array
+        $totalPerOffice = DB::table('encounters as enc')
+            ->leftJoin('offices as o', 'enc.office_id', '=', 'o.id')
+            ->select(
+                'o.name as office_name',
+                DB::raw('COUNT(*) AS total'),
+                DB::raw('SUM(CASE WHEN enc.is_positive = 1 THEN 1 ELSE 0 END) AS total_positive'),
+                DB::raw('SUM(CASE WHEN enc.is_positive = 0 THEN 1 ELSE 0 END) AS total_negative'),
+                DB::raw('SUM(CASE WHEN enc.employment_id = 1 THEN 1 ELSE 0 END) AS total_job_order'),
+                DB::raw('SUM(CASE WHEN enc.employment_id = 2 THEN 1 ELSE 0 END) AS total_permanent')
+            )
+            ->where('enc.event_id', Encounter::DRUG_EVENT_CODE)
+            ->groupBy('enc.office_id')
+            ->get();
+        // $totalPerOffice = DB::table('encounters as enc')
+        //     ->leftJoin('offices as o', 'enc.office_id', '=', 'o.id')
+        //     ->select('o.name as office_name', DB::raw('COUNT(*) as total'))
+        //     ->where('enc.event_id', Encounter::DRUG_EVENT_CODE)
+        //     ->groupBy('enc.office_id')
+        //     ->get();
+        // dd($totalPerOffice);
         return response()->json($totalPerOffice);
     }
 

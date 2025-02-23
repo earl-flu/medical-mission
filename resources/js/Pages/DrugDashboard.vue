@@ -1,11 +1,5 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import EncounterStatisticsChart from "@/Components/EncounterStatisticsChart.vue";
-import DispensedMedsChart from "@/Components/DispensedMedsChart.vue";
-import EncounterServiceChart from "@/Components/EncounterServiceChart.vue";
-import MunicipalityChart from "@/Components/MunicipalityChart.vue";
-import DashboardCard from "@/Components/DashboardCard.vue";
-import AvailableStocksChart from "@/Components/AvailableStocksChart.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import DrugTestOfficeChart from "@/Pages/Drugs/DrugTestOfficeChart.vue";
 import PositivePerOfficeChart from "@/Pages/Drugs/PositivePerOfficeChart.vue";
@@ -16,11 +10,26 @@ import TotalCards from "@/Pages/Drugs/TotalCards.vue";
 import "vue-select/dist/vue-select.css";
 import VueSelect from "vue-select";
 import { Head } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import TextInput from "@/Components/TextInput.vue";
 import Datalabels from "chartjs-plugin-datalabels";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import EncountersByProgramChart from "@/Components/EncountersByProgramChart.vue";
+
+const officesData = ref([]);
+
+// Fetch data from the API
+const fetchData = async () => {
+  try {
+    const response = await fetch(route("drugs.getTotalPerOffice"));
+    const data = await response.json();
+    officesData.value = data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+onMounted(fetchData);
 </script>
 
 <template>
@@ -45,7 +54,15 @@ import EncountersByProgramChart from "@/Components/EncountersByProgramChart.vue"
                 class="flex-1 bg-white shadow p-4 flex items-center justify-center flex-col gap-4"
                 style="height: 400px"
               >
-                <DrugTestOfficeChart />
+                <DrugTestOfficeChart :data="officesData" />
+              </div>
+            </div>
+            <div class="flex gap-10 mt-20">
+              <div
+                class="flex-1 bg-white shadow p-4 flex items-center justify-center flex-col gap-4"
+                style="height: 400px"
+              >
+                <EmploymentPieChart :data="officesData" />
               </div>
               <div
                 class="flex-1 bg-white shadow p-4 flex items-center justify-center flex-col gap-4"
@@ -59,13 +76,13 @@ import EncountersByProgramChart from "@/Components/EncountersByProgramChart.vue"
                 class="flex-1 bg-white shadow p-4 flex items-center justify-center flex-col gap-4"
                 style="height: 400px"
               >
-                <PositivePerOfficeChart />
+                <PositivePerOfficeChart :data="officesData" />
               </div>
               <div
                 class="flex-1 bg-white shadow p-4 flex items-center justify-center flex-col gap-4"
                 style="height: 400px"
               >
-                <PositiveByEmploymentPieChart />
+                <!-- <PositiveByEmploymentPieChart /> -->
               </div>
             </div>
             <div class="flex gap-10 mt-20">
@@ -73,7 +90,7 @@ import EncountersByProgramChart from "@/Components/EncountersByProgramChart.vue"
                 class="flex-1 bg-white shadow p-4 flex items-center justify-center flex-col gap-4"
                 style="height: 400px"
               >
-                <EmploymentPieChart />
+                <!-- <EmploymentPieChart /> -->
               </div>
               <div
                 class="flex-1 bg-white shadow p-4 flex items-center justify-center flex-col gap-4"
