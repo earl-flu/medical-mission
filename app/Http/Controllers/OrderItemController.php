@@ -25,6 +25,7 @@ class OrderItemController extends Controller
     public function create(Encounter $encounter)
     {
         $encounter->load('patient');
+        
         $items = Item::query()
             ->when(FacadesRequest::input('search'), function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");

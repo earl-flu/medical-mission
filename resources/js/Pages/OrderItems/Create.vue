@@ -29,7 +29,7 @@ watch(
   search,
   throttle(function (search) {
     router.get(
-      route("order-items.create", props.patient_id),
+      route("order-items.create", { encounter: props.encounter.id }),
       {
         search,
       },
@@ -77,7 +77,9 @@ watch(
           class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg"
         >
           <div class="p-6 text-gray-900 dark:text-gray-100">
-            <h2 class="text-xl font-medium mb-4"><font-awesome-icon class="mr-2" :icon="['fas', 'pills']" />Items</h2>
+            <h2 class="text-xl font-medium mb-4">
+              <font-awesome-icon class="mr-2" :icon="['fas', 'pills']" />Items
+            </h2>
             <div class="mb-10">
               <div class="relative z-0 w-full mb-6 group">
                 <TextInput

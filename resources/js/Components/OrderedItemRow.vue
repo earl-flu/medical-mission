@@ -51,16 +51,14 @@ function remove() {
 
 function closeModal() {
   editing.value = false;
-  removing.value = false;
+  // removing.value = false;
 }
 
 const submit = () => {
   form.put(route("orderItems.update", props.ordered_item.id), {
     onSuccess: () => {
       editing.value = false;
-      showToast(
-        `${props.ordered_item.item.name} - updated successfully`
-      );
+      showToast(`${props.ordered_item.item.name} - updated successfully`);
     },
   });
 };
