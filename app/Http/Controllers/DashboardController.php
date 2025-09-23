@@ -41,6 +41,19 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function getTotalByService($eventId)
+    {
+        $totalServices = DB::table('encounters as enc')
+            ->leftJoin('encounter_service as es', 'enc.id', '=', 'es.encounter_id')
+            ->leftJoin('services', 'es.service_id', '=', 'services.id')
+            ->select('services.name as service_name', DB::raw('COUNT(*) AS total'))
+            ->where('enc.event_id', $eventId)
+            ->groupBy('services.name')
+            ->get();
+
+        return response()->json($totalServices);
+    }
+
     public function getDispensedMedsData($eventId)
     {
         $dispensedMeds = DB::table('encounters')

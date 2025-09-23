@@ -3,6 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import EncounterStatisticsChart from "@/Components/EncounterStatisticsChart.vue";
 import DispensedMedsChart from "@/Components/DispensedMedsChart.vue";
 import DispensedMedsTable from "@/Components/DispensedMedsTable.vue";
+import TotalByServiceTable from "@/Components/TotalByServiceTable.vue";
 import EncounterServiceChart from "@/Components/EncounterServiceChart.vue";
 import MunicipalityChart from "@/Components/MunicipalityChart.vue";
 import DashboardCard from "@/Components/DashboardCard.vue";
@@ -59,6 +60,14 @@ const selectedEventId = ref(
         <div class="overflow-hidden sm:rounded-lg">
           <div class="p-6 text-gray-900 dark:text-gray-100">
             <DashboardCard :eventId="selectedEventId" />
+            <div class="flex gap-10 mt-20">
+              <div
+                class="flex-1 bg-white shadow p-4 flex items-center justify-center flex-col gap-4"
+              >
+                <h2 class="font-bold">Total by Service</h2>
+                <TotalByServiceTable :eventId="selectedEventId" />
+              </div>
+            </div>
             <div class="flex gap-10 mt-20">
               <div
                 class="flex-1 bg-white shadow p-4 flex items-center justify-center flex-col gap-4"

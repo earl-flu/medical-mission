@@ -86,6 +86,7 @@ Route::middleware('auth')->group(function () {
         Route::controller(DashboardController::class)->group(function () {
             Route::get('/statistics/{eventId}', 'getStatistics')->name('event.statistics');
             Route::get('/dispensedMeds/{eventId}', 'getDispensedMedsData')->name('event.dispensedMeds');
+            Route::get('/totalByService/{eventId}', 'getTotalByService')->name('event.totalByService');
             Route::get('/encounterServiceData/{eventId}', 'getEncounterServiceData')->name('event.encounterServiceData');
             Route::get('/municipalityData/{eventId}', 'getMunicipalityData')->name('event.municipalityData');
             Route::get('/barangayData/{eventId}/{municipalityName}', 'getBarangayData')->name('event.barangayData');
@@ -99,7 +100,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard', [DrugDashboardController::class, 'index'])->name('drugs.dashboard');
         Route::get('/positive', [DrugDashboardController::class, 'positiveList'])->name('drugs.positiveList');
     });
-   
+
     Route::get('/test', function () {
         return app()->make(DrugDashboardController::class)->getTotalPerOffice();
     });
