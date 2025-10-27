@@ -120,6 +120,22 @@ function setMaxDate() {
             <form @submit.prevent="submitPatient()">
               <div class="grid md:grid-cols-3 md:gap-6">
                 <div class="relative z-0 w-full mb-6 group">
+                  <InputLabel for="last_name" value="Last Name*" />
+                  <TextInput
+                    name="last_name"
+                    id="last_name"
+                    type="text"
+                    class="mt-1 block w-full"
+                    placeholder=" "
+                    v-model="form.last_name"
+                    required
+                    autofocus
+                    autocomplete="last_name"
+                  />
+
+                  <InputError class="mt-2" :message="form.errors.last_name" />
+                </div>
+                <div class="relative z-0 w-full mb-6 group">
                   <InputLabel for="first_name" value="First Name*" />
                   <TextInput
                     name="first_name"
@@ -148,22 +164,6 @@ function setMaxDate() {
                   />
 
                   <InputError class="mt-2" :message="form.errors.middle_name" />
-                </div>
-                <div class="relative z-0 w-full mb-6 group">
-                  <InputLabel for="last_name" value="Last Name*" />
-                  <TextInput
-                    name="last_name"
-                    id="last_name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    placeholder=" "
-                    v-model="form.last_name"
-                    required
-                    autofocus
-                    autocomplete="last_name"
-                  />
-
-                  <InputError class="mt-2" :message="form.errors.last_name" />
                 </div>
               </div>
               <div class="grid md:grid-cols-3 md:gap-6">
