@@ -203,7 +203,7 @@ function submitEncounter() {
                       :key="office.id"
                       :value="office.id"
                     >
-                      {{ office.name }}
+                      {{ office.abbreviation }} | {{ office.name }}
                     </option>
                   </select>
 
