@@ -167,7 +167,7 @@ function updateEncounter() {
                   />
                 </div>
               </div>
-              <template v-if="form.event_id === 12">
+              <template v-if="form.event_id === 21">
                 <div class="relative z-0 w-full group">
                   <InputLabel for="office" value="Office" />
                   <select
@@ -234,7 +234,7 @@ function updateEncounter() {
                 </div>
               </template>
 
-              <template v-if="form.event_id !== 12">
+              <template v-if="form.event_id !== 21">
                 <p class="font-bold text-xl mt-10">Vital Signs</p>
                 <div class="grid md:grid-cols-3 md:gap-6 mt-4">
                   <div
