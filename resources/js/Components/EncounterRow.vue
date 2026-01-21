@@ -40,8 +40,13 @@ function deleteEncounter(encounter) {
     </td>
     <td class="px-6 py-4 text-right">
       <Link
-        :href="route('encounter.show', props.encounter)"
+        :href="route('order-items.create', props.encounter)"
         class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+        >Order</Link
+      >
+      <Link
+        :href="route('encounter.show', props.encounter)"
+        class="font-medium text-blue-600 dark:text-blue-500 hover:underline ml-3"
         >Show</Link
       >
       <Link
