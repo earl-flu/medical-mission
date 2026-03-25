@@ -48,6 +48,17 @@ const isLowStock = computed(() => {
     <td class="px-6 py-4">
       {{ item.restock_threshold }}
     </td>
+    <td class="px-6 py-4">
+      <span
+        :class="{
+          'px-2 py-1 rounded font-semibold text-xs': true,
+          'bg-green-100 text-green-800': item.status == 1,
+          'bg-red-100 text-red-800': item.status != 1,
+        }"
+      >
+        {{ item.status == 1 ? "Active" : "Inactive" }}
+      </span>
+    </td>
     <td class="px-6 py-4 text-right">
       <a
         href="#"

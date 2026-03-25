@@ -167,6 +167,21 @@ const submit = () => {
                     :message="form.errors.restock_threshold"
                   />
                 </div>
+
+                <div class="relative z-0 w-full mb-6 group">
+                  <InputLabel for="status" value="Status*" />
+                  <select
+                    name="status"
+                    id="status"
+                    v-model="form.status"
+                    required
+                    class="w-full border-gray-300 mt-1 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                  >
+                    <option :value="1">Active</option>
+                    <option :value="0">Inactive</option>
+                  </select>
+                  <InputError class="mt-2" :message="form.errors.status" />
+                </div>
               </div>
               <button
                 type="submit"

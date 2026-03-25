@@ -108,11 +108,13 @@ class ItemController extends Controller
      */
     public function update(Request $request, Item $item)
     {
+
         $validatedData = $request->validate([
             'name' => ['required', 'string', Rule::unique('items', 'name')->ignore($item->id)],
             'quantity' => 'required|integer|min:0',
             'restock_threshold' => 'required|integer|min:1',
             'lot_no' => 'nullable|string',
+            'status' => 'boolean',
             'expiration_date' => 'nullable|date',
             'program_id' => 'nullable|exists:programs,id',
         ]);

@@ -97,6 +97,7 @@ watch(
                   <th scope="col" class="px-6 py-3">Expiry</th>
                   <th scope="col" class="px-6 py-3">Program</th>
                   <th scope="col" class="px-6 py-3">Restock Threshold</th>
+                  <th scope="col" class="px-6 py-3">Status</th>
                   <th scope="col" class="px-6 py-3">
                     <span class="sr-only">Edit</span>
                   </th>
