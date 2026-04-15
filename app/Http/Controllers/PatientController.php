@@ -34,7 +34,7 @@ class PatientController extends Controller
                 $query->where('last_name', 'like', "%{$search_last_name}%");
             })
             ->orderBy('created_at', 'desc')
-            ->paginate(3)
+            ->paginate(10)
             ->withQueryString()
             ->through(fn($patient) => [
                 'id' => $patient->id,
