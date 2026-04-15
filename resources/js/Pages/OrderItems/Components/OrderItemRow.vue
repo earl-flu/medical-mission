@@ -21,20 +21,20 @@ const isLowStock = computed(() => {
 <template>
   <tr
     @click="cart.addOrderItem(props.item)"
-    class="cursor-pointer bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+    class="cursor-pointer text-xs bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
     :class="{ 'text-yellow-600': isLowStock }"
   >
     <th
       scope="row"
-      class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+      class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
       :class="{ 'text-yellow-600': isLowStock }"
     >
       {{ item.name }}
     </th>
-    <td class="px-6 py-4">
+    <td class="px-2 py-2">
       {{ item.quantity }}
     </td>
-    <td class="px-6 py-4">
+    <td class="px-2 py-2">
       {{ item.lot_no }}
     </td>
   </tr>

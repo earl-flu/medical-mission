@@ -70,17 +70,28 @@ watch(
               <div class="relative z-0 w-full mb-6 group">
                 <InputLabel for="search_first_name" value="Search" />
                 <TextInput
+                  name="search_last_name"
+                  id="search_last_name"
+                  type="text"
+                  class="mt-1 block w-full"
+                  placeholder="Last Name"
+                  v-model="search_last_name"
+                  required
+                  autocomplete="off"
+                />
+              </div>
+              <div class="relative z-0 w-full mb-6 group">
+                <TextInput
                   name="search_first_name"
                   id="search_first_name"
                   type="text"
-                  class="mt-1 block w-full"
+                  class="mt-1 block w-full mt-6"
                   placeholder="First Name"
                   v-model="search_first_name"
                   required
                   autocomplete="off"
                 />
               </div>
-
               <div class="relative z-0 w-full mb-6 group">
                 <TextInput
                   name="search_middle_name"
@@ -93,32 +104,25 @@ watch(
                   autocomplete="off"
                 />
               </div>
-
-              <div class="relative z-0 w-full mb-6 group">
-                <TextInput
-                  name="search_last_name"
-                  id="search_last_name"
-                  type="text"
-                  class="mt-1 block w-full mt-6"
-                  placeholder="Last Name"
-                  v-model="search_last_name"
-                  required
-                  autocomplete="off"
-                />
-              </div>
             </div>
-
-            <PatientCard
-              v-for="patient in patients.data"
-              :key="patient.id"
-              :patient="patient"
-            />
-            <p
-              v-if="!patients.data.length"
-              class="text-red-500 text-xs text-center font-medium uppercase p-5"
-            >
-              NO PATIENTS FOUND
-            </p>
+            <table class="w-full">
+              <tr>
+                <th class="text-left">Full Name</th>
+                <th class="text-left">Sex</th>
+                <th class="text-left">Birthday</th>
+              </tr>
+              <PatientCard
+                v-for="patient in patients.data"
+                :key="patient.id"
+                :patient="patient"
+              />
+              <p
+                v-if="!patients.data.length"
+                class="text-red-500 text-xs text-center font-medium uppercase p-5"
+              >
+                NO PATIENTS FOUND
+              </p>
+            </table>
             <div class="mt-6 flex">
               <div class="flex-1"></div>
               <Pagination :links="patients.links" v-if="patients.total" />

@@ -25,13 +25,15 @@ class OrderItemController extends Controller
     public function create(Encounter $encounter)
     {
         $encounter->load('patient');
-        
+
         $items = Item::query()
             ->when(FacadesRequest::input('search'), function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
             })
+            ->where('status', true)
+            ->where('quantity', '>', 0)
             ->orderBy('created_at', 'desc')
-            ->paginate(5)
+            ->paginate(15)
             ->withQueryString();
 
         return Inertia::render('OrderItems/Create', [
@@ -111,7 +113,7 @@ class OrderItemController extends Controller
             // Adjust Item quantity
             $item->update(['quantity' => $item->quantity - $quantityDifference]);
         });
-      
+
         return redirect()->route('encounter.show', $orderItem->encounter)->with('message', 'Successfully added Order(s)');
     }
 

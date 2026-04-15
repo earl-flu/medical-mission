@@ -50,7 +50,7 @@ class Patient extends Model
         $first_name = $this->attributes['first_name'];
         $last_name = $this->attributes['last_name'];
         $suffix = $this->attributes['suffix'] ?? '';
-        return  trim("{$first_name} {$middle_name} {$last_name} {$suffix}");
+        return  trim("{$last_name} {$first_name} {$middle_name} {$suffix}");
     }
 
     public function getMunicipalityStrAttribute()

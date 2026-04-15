@@ -67,12 +67,12 @@ watch(
         > Add Order
       </p>
     </template>
-    <div class="py-12 px-8 flex justify-center max-w-7xl mx-auto gap-8">
+    <div class="py-12 px-8 flex justify-center max-w-9xl mx-auto gap-8">
       <div class="flex-1">
         <!-- Cart Here -->
         <Cart :encounter="props.encounter" />
       </div>
-      <div class="mx-auto" style="width: 500px">
+      <div class="mx-auto" style="width: 600px">
         <div
           class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg"
         >

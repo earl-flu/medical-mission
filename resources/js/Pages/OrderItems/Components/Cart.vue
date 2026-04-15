@@ -45,17 +45,27 @@ onUnmounted(() => {
   >
     <form @submit.prevent="submit()">
       <div class="p-6 text-gray-900 dark:text-gray-100">
-        <h2 class="text-xl font-medium mb-4"><font-awesome-icon class="mr-2" :icon="['fas', 'cart-shopping']" />Cart</h2>
-        <h2
-          class="text-2xl mb-1 font-medium uppercase text-cyan-700 font-medium"
-        >
-          {{ encounter.patient.full_name }}
+        <h2 class="text-xl font-medium mb-4">
+          <font-awesome-icon
+            class="mr-2"
+            :icon="['fas', 'cart-shopping']"
+          />Cart
         </h2>
-        <div class="opacity-75">
-          <p>{{ encounter.event_name }}</p>
-          <p>{{ encounter.patient.birthdate_str }}</p>
-          <p>{{ encounter.patient.sex_str }}</p>
-         <p class="mb-8" v-html="formatDate(encounter.encounter_date) || '-'"></p>
+        <div class="flex gap-5">
+          <h2
+            class="text-xl mb-1 font-medium uppercase text-cyan-700 font-medium"
+          >
+            {{ encounter.patient.full_name }}
+          </h2>
+          <div class="opacity-75 text-xs">
+            <p>{{ encounter.event_name }}</p>
+            <p>{{ encounter.patient.birthdate_str }}</p>
+            <p>{{ encounter.patient.sex_str }}</p>
+            <p
+              class="mb-8"
+              v-html="formatDate(encounter.encounter_date) || '-'"
+            ></p>
+          </div>
         </div>
         <ul class="list-disc mb-3 ml-5" v-if="errors">
           <li
@@ -73,8 +83,8 @@ onUnmounted(() => {
             class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
           >
             <tr>
-              <th></th>
-              <th scope="col" class="p-4 text-xs" style="width: 260px">
+              <th scope="col" style="width: 50px"></th>
+              <th scope="col" class="p-4 text-xs" style="width: 320px">
                 Item Name
               </th>
               <th scope="col" class="p-4 text-xs" style="width: 120px">

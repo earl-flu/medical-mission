@@ -42,6 +42,7 @@ class PatientController extends Controller
                 'full_address' => $patient->full_address,
                 'age_years' => $patient->age_years,
                 'sex' => $patient->sex,
+                'birthdate' => $patient->birthdate,
             ]);
 
         return Inertia::render('Patients/Index', [

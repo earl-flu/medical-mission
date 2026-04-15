@@ -29,11 +29,11 @@ const instruction = ref(props.orderedItem.instruction);
         X
       </div>
     </td>
-    <td class="break-all text-wrap p-4 dark:text-white product-name">
+    <td class="break-all text-wrap p-2 dark:text-white product-name">
       {{ props.orderedItem.name }}
     </td>
-    <td class="break-all text-wrap p-4">
-      <div class="relative z-0 w-full mb-6 group">
+    <td class="break-all text-wrap p-2">
+      <div class="relative z-0 w-full mb-2 group">
         <TextInput
           @change="cart.adjustOrderQuantity(props.orderedItem.id, quantity)"
           name="order_quantity"
