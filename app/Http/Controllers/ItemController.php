@@ -70,7 +70,7 @@ class ItemController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|unique:items,name|string',
+            'name' => 'required|string',
             'quantity' => 'required|integer|min:1',
             'restock_threshold' => 'required|integer|min:1',
             'lot_no' => 'nullable|string',
