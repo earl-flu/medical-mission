@@ -52,9 +52,7 @@ onUnmounted(() => {
           />Cart
         </h2>
         <div class="flex gap-5">
-          <h2
-            class="text-xl mb-1 font-medium uppercase text-cyan-700 font-medium"
-          >
+          <h2 class="text-xl mb-1 font-medium uppercase text-cyan-700">
             {{ encounter.patient.full_name }}
           </h2>
           <div class="opacity-75 text-xs">
@@ -109,7 +107,7 @@ onUnmounted(() => {
             'opacity-25 cursor-not-allowed': form.processing,
           }"
           :disabled="form.processing"
-          class="w-full mt-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          class="w-full mt-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           Save
         </button>

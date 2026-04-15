@@ -98,7 +98,7 @@ watch(
                   name="search_first_name"
                   id="search_first_name"
                   type="text"
-                  class="mt-1 block w-full mt-6"
+                  class="block w-full mt-6"
                   placeholder="First Name*"
                   v-model="search_first_name"
                   required
@@ -110,7 +110,7 @@ watch(
                   name="search_middle_name"
                   id="search_middle_name"
                   type="text"
-                  class="mt-1 block w-full mt-6"
+                  class="block w-full mt-6"
                   placeholder="Middle Name"
                   v-model="search_middle_name"
                   required
