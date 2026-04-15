@@ -39,7 +39,7 @@ class PatientController extends Controller
                         $q->where('last_name', 'like', "%{$value}%");
                     });
             }, function ($query) {
-                // 👇 Force empty result
+                // Force empty result
                 $query->whereRaw('1 = 0');
             })
             ->orderBy('created_at', 'desc')
