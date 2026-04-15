@@ -58,12 +58,25 @@ watch(
           class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg"
         >
           <div class="mt-5 mx-auto sm:px-6 lg:px-8 mb-6 flex justify-end">
-            <Link
-              :href="route('patients.create')"
-              class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 cursor-pointer"
+            <template
+              v-if="
+                (search_last_name || search_first_name || search_last_name) &&
+                patients.data.length === 0
+              "
             >
-              Add Patient
-            </Link>
+              <Link
+                :href="
+                  route('patients.create', {
+                    search_first_name: search_first_name,
+                    search_middle_name: search_middle_name,
+                    search_last_name: search_last_name,
+                  })
+                "
+                class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 cursor-pointer"
+              >
+                Add Patient
+              </Link>
+            </template>
           </div>
           <div class="p-6 text-gray-900 dark:text-gray-100">
             <div class="grid md:grid-cols-3 md:gap-6 mb-10">
@@ -74,7 +87,7 @@ watch(
                   id="search_last_name"
                   type="text"
                   class="mt-1 block w-full"
-                  placeholder="Last Name"
+                  placeholder="Last Name*"
                   v-model="search_last_name"
                   required
                   autocomplete="off"
@@ -86,7 +99,7 @@ watch(
                   id="search_first_name"
                   type="text"
                   class="mt-1 block w-full mt-6"
-                  placeholder="First Name"
+                  placeholder="First Name*"
                   v-model="search_first_name"
                   required
                   autocomplete="off"
@@ -116,12 +129,14 @@ watch(
                 :key="patient.id"
                 :patient="patient"
               />
-              <p
-                v-if="!patients.data.length"
-                class="text-red-500 text-xs text-center font-medium uppercase p-5"
-              >
-                NO PATIENTS FOUND
-              </p>
+              <tr v-if="!patients.data.length">
+                <td
+                  colspan="3"
+                  class="text-red-500 text-xs text-center font-medium uppercase p-5"
+                >
+                  NO PATIENTS FOUND
+                </td>
+              </tr>
             </table>
             <div class="mt-6 flex">
               <div class="flex-1"></div>

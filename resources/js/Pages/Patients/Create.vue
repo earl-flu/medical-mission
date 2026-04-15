@@ -24,6 +24,10 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  prefill: {
+    type: Object,
+    default: () => ({}),
+  },
 });
 
 const barangays = ref([]);
@@ -35,9 +39,9 @@ onMounted(() => {
 });
 
 const form = useForm({
-  first_name: "",
-  middle_name: "",
-  last_name: "",
+  first_name: props.prefill.search_first_name || "",
+  middle_name: props.prefill.search_middle_name || "",
+  last_name: props.prefill.search_last_name || "",
   birthdate: "",
   sex: "",
   suffix: null,

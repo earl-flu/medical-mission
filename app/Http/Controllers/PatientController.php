@@ -23,15 +23,24 @@ class PatientController extends Controller
      */
     public function index()
     {
+        $searchFirst = FacadesRequest::input('search_first_name');
+        $searchLast = FacadesRequest::input('search_last_name');
+        $searchMiddle = FacadesRequest::input('search_middle_name');
+
         $patients = Patient::query()
-            ->when(FacadesRequest::input('search_first_name'), function ($query, $search_first_name) {
-                $query->where('first_name', 'like', "%{$search_first_name}%");
-            })
-            ->when(FacadesRequest::input('search_middle_name'), function ($query, $search_middle_name) {
-                $query->where('middle_name', 'like', "%{$search_middle_name}%");
-            })
-            ->when(FacadesRequest::input('search_last_name'), function ($query, $search_last_name) {
-                $query->where('last_name', 'like', "%{$search_last_name}%");
+            ->when($searchFirst || $searchLast || $searchMiddle, function ($query) use ($searchFirst, $searchLast, $searchMiddle) {
+                $query->when($searchFirst, function ($q, $value) {
+                    $q->where('first_name', 'like', "%{$value}%");
+                })
+                    ->when($searchMiddle, function ($q, $value) {
+                        $q->where('middle_name', 'like', "%{$value}%");
+                    })
+                    ->when($searchLast, function ($q, $value) {
+                        $q->where('last_name', 'like', "%{$value}%");
+                    });
+            }, function ($query) {
+                // 👇 Force empty result
+                $query->whereRaw('1 = 0');
             })
             ->orderBy('created_at', 'desc')
             ->paginate(10)
@@ -47,7 +56,11 @@ class PatientController extends Controller
 
         return Inertia::render('Patients/Index', [
             'patients' => $patients,
-            'filters' => FacadesRequest::only(['search_first_name', 'search_middle_name', 'search_last_name'])
+            'filters' => FacadesRequest::only([
+                'search_first_name',
+                'search_middle_name',
+                'search_last_name'
+            ])
         ]);
     }
 
@@ -59,7 +72,12 @@ class PatientController extends Controller
         $cities = City::where('province_id', City::CATANDUANES)->get();
         return Inertia::render('Patients/Create', [
             'cities' => $cities,
-            'diagnoses' => Diagnosis::all()
+            'diagnoses' => Diagnosis::all(),
+            'prefill' => FacadesRequest::only([
+                'search_first_name',
+                'search_middle_name',
+                'search_last_name',
+            ]),
         ]);
     }
 
