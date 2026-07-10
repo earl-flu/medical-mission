@@ -39,6 +39,10 @@ const bloodPressure = computed(() => {
     return "-";
   }
 });
+
+function downloadPdf() {
+  window.location.href = route("encounter.dispensedMedsPdf", props.encounter);
+}
 </script>
 
 <template>
@@ -175,6 +179,15 @@ const bloodPressure = computed(() => {
                 />
                 Orders
               </p>
+
+              <button
+                type="button"
+                class="px-4 py-2 mb-4 bg-green-600 hover:bg-green-700 text-white rounded shadow text-sm flex items-center"
+                @click="downloadPdf"
+              >
+                <font-awesome-icon icon="file-pdf" class="mr-2" />
+                Download PDF
+              </button>
 
               <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table

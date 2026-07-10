@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiagnosisController;
 use App\Http\Controllers\DrugDashboardController;
 use App\Http\Controllers\EncounterController;
+use App\Http\Controllers\EncounterServiceController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\GuestPageController;
 use App\Http\Controllers\ItemController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
+use App\Models\EncounterService;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -57,12 +59,21 @@ Route::middleware('auth')->group(function () {
         Route::resource('encounter', EncounterController::class)->except('create');
     });
 
+    Route::controller(EncounterServiceController::class)->group(function () {
+        Route::get('/encounter-service/{encounter}', 'create')->name('encounter-service.create');
+        Route::post('/encounter-service/{encounter}', 'store')->name('encounter-service.store');
+    });
+
     // Order item routes
     Route::controller(OrderItemController::class)->group(function () {
         Route::get('patients/{encounter}/order-items', 'create')->name('order-items.create');
         Route::post('patients/{encounter}/order-items', 'store')->name('order-items.store');
         Route::resource('/orderItems', OrderItemController::class)->only(['update', 'destroy']);
     });
+
+    //download pdf
+    Route::get('/encounter/{encounter}/dispensed-meds-pdf', [EncounterController::class, 'generateOrderedItemsPdf'])
+        ->name('encounter.dispensedMedsPdf');
 
     // Diagnosis routes
     Route::controller(DiagnosisController::class)->group(function () {

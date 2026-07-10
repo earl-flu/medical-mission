@@ -266,7 +266,6 @@ function submitEncounter() {
                       class="mt-1 block w-full"
                       placeholder=" "
                       v-model="form.temperature"
-                      autofocus
                       autocomplete="temperature"
                     />
 
@@ -285,13 +284,12 @@ function submitEncounter() {
                       class="mt-1 block w-full"
                       placeholder="120"
                       v-model="form.bp_systolic"
-                      autofocus
                       autocomplete="bp_systolic"
                     />
 
                     <InputError
                       class="mt-2"
-                      :message="form.errors.temperature"
+                      :message="form.errors.bp_systolic"
                     />
                   </div>
 
@@ -304,7 +302,6 @@ function submitEncounter() {
                       class="mt-1 block w-full"
                       placeholder="80"
                       v-model="form.bp_diastolic"
-                      autofocus
                       autocomplete="bp_diastolic"
                     />
 
@@ -328,7 +325,6 @@ function submitEncounter() {
                       class="mt-1 block w-full"
                       placeholder=" "
                       v-model="form.respiratory_rate"
-                      autofocus
                       autocomplete="respiratory_rate"
                     />
 
@@ -350,7 +346,6 @@ function submitEncounter() {
                       class="mt-1 block w-full"
                       placeholder=" "
                       v-model="form.oxygen_saturation"
-                      autofocus
                       autocomplete="oxygen_saturation"
                     />
 
@@ -369,7 +364,6 @@ function submitEncounter() {
                       class="mt-1 block w-full"
                       placeholder=" "
                       v-model="form.pulse_rate"
-                      autofocus
                       autocomplete="pulse_rate"
                     />
 

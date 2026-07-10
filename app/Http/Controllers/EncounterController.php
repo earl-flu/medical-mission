@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Spatie\LaravelPdf\Facades\Pdf;
 
 class EncounterController extends Controller
 {
@@ -45,7 +46,7 @@ class EncounterController extends Controller
      */
     public function store(Request $request)
     {
-        DB::transaction(function () use ($request, &$encounter) {
+        $encounter = DB::transaction(function () use ($request) {
             $validated = $request->validate([
                 'is_opto' => 'nullable|boolean',
                 'is_pregnant' => 'nullable|boolean',
@@ -60,17 +61,23 @@ class EncounterController extends Controller
                 'patient_id' => 'required|exists:patients,id',
                 'patient_birthdate' => 'required|date',
                 'encounter_date' => 'required|date',
-                'services' => 'array|exists:services,id',
+                'services' => 'nullable|array',
+                'services.*' => 'exists:services,id',
                 'remarks' => 'nullable|string',
-                'is_positive' => 'nullable|boolean',
+                'is_positive' => 'sometimes|boolean',
                 'office_id' => 'nullable|exists:offices,id',
                 'employment_id' => 'nullable|exists:employments,id',
             ]);
-            $validated['age'] = Carbon::parse($validated['patient_birthdate'])->age;
+
+            $validated['age'] = Carbon::parse($validated['patient_birthdate'])
+                ->diffInYears(Carbon::parse($validated['encounter_date']));
+
             $validated['encoded_by'] = Auth::id();
 
             $encounter = Encounter::create($validated);
-            $encounter->services()->sync($request->services);
+            $encounter->services()->sync($validated['services'] ?? []);
+
+            return $encounter;
         });
 
         return redirect()->route('patients.show', $encounter->patient);
@@ -95,6 +102,34 @@ class EncounterController extends Controller
             'ordered_items' => $encounter->orderItems->load('item')
         ]);
     }
+
+    public function generateOrderedItemsPdf(Encounter $encounter)
+    {
+        // Load related models
+        $encounter->load(['patient', 'orderItems.item', 'event']);
+
+        $orderedItems = $encounter->orderItems->load('item');
+
+        return Pdf::view('pdf.dispensed-meds', [
+            'encounter' => $encounter,
+            'orderedItems' => $orderedItems,
+        ])
+            ->withBrowsershot(function ($browsershot) {
+                $browsershot->setNodeBinary(env('NODE_DIR'));
+            })
+            ->name(
+                strtoupper($encounter->patient->full_name)
+
+                    . ' - '
+                    . $encounter->id
+                    . ' - '
+                    . now()->format('mdY')
+                    . '.pdf'
+            )
+
+            ->download();
+    }
+
 
     /**
      * Show the form for editing the specified resource.

@@ -44,4 +44,5 @@ return array(
     'd634523d799d97a8ab4807b650bf5cea' => $vendorDir . '/pestphp/pest-plugin-laravel/src/Autoload.php',
     '72b1e3f4a2af9b30b3f137b3ec2057fc' => $vendorDir . '/spatie/laravel-activitylog/src/helpers.php',
     '320163ac6b93aebe3dc25b60a0533d56' => $vendorDir . '/spatie/laravel-ignition/src/helpers.php',
+    '5c6a9495e67e3398fc97ef867ed00846' => $vendorDir . '/spatie/laravel-pdf/src/Support/functions.php',
 );

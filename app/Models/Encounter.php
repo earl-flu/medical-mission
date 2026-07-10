@@ -36,6 +36,12 @@ class Encounter extends Model
         return $this->belongsTo(Patient::class);
     }
 
+    // INSERT_YOUR_CODE
+    public function encounter_service()
+    {
+        return $this->hasMany(EncounterService::class, 'encounter_id');
+    }
+
     public function office()
     {
         return $this->belongsTo(Office::class);
